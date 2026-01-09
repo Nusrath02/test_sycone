@@ -18,4 +18,23 @@ frappe.ready(function() {
     
     // Append footer to body
     document.body.appendChild(footer);
+    
+    // Scroll detection to show/hide footer
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', function() {
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (currentScroll > lastScroll) {
+            // Scrolling DOWN - show footer
+            footer.style.transform = 'translateY(0)';
+            footer.style.opacity = '1';
+        } else {
+            // Scrolling UP - hide footer
+            footer.style.transform = 'translateY(100%)';
+            footer.style.opacity = '0';
+        }
+        
+        lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+    });
 });
