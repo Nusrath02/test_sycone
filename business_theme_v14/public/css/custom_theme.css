@@ -50,6 +50,17 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
     display: none;
 }
 
+/* big container heading color */
+.widget.links-widget-box .widget-head .widget-label .widget-title{
+    color:red !important;
+}
+
+/* small container inside color */
+
+.widget.links-widget-box .link-item {
+    color:#21417b !important;
+}
+
 
 /* Abhi */
 
