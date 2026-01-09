@@ -51,7 +51,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 /* Target ONLY shortcut widgets */
 .ce-block.col-lg-3:has(.shortcut-widget-box) {
     flex: 0 0 50% !important;
-    max-width: 50% !important;
+    max-width: 30% !important;
 }
 
 
