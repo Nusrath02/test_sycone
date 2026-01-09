@@ -279,5 +279,11 @@ input#navbar-search.form-control {
     color: white;
 }
 /* searchbar placeholder */
-
+/* ------------------ */
+/* Navbar bell icon color (white) */
+.navbar .es-icon.icon-sm {
+    fill: white !important;
+    stroke: white !important;
+}
+/* Navbar bell icon color (white) */
 /* Searchbar of Navebar end */
