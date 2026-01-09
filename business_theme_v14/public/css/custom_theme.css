@@ -30,7 +30,7 @@
 }
 
 /* shortcut container */
-.widget.shortcut-widget-box .widget-title{
+.widget.shortcut-widget-box{
     color:#525252 !important;
     font:14px !important;
     background:#ffffff !important;
