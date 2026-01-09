@@ -286,4 +286,13 @@ input#navbar-search.form-control {
     stroke: white !important;
 }
 /* Navbar bell icon color (white) */
+/* Navbar navigation link text color white */
+#navbar-breadcrumbs > li > a {
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    text-decoration: none !important;
+}
+/* Navbar navigation link text color white end */
 /* Searchbar of Navebar end */
