@@ -1,21 +1,22 @@
 
 /* ==================== ITCHAMPS DASHBOARD THEME ==================== */
-/* ==================== NAVBAR STYLING ==================== */
-/* Top navigation bar with ITChamps logo */
-
-/* Hide default ERPNext logo and use ITChamps logo */
+/* Hide default ERPNext logo */
 .navbar .app-logo {
     display: none !important;
 }
 
 /* ITChamps logo styling - FIXED */
-.-brand {
-    background: url("/assets/business_theme_v14/images/SYConE Final Logo1.png") no-repeat left center;
-    background-size: contain;
-    width: 160px;
-    height: 40px;
-    text-indent: -9999px; /* Hide any text content */
+.navbar-brand {
+    background: url("/assets/business_theme_v14/images/SYConE Final Logo1.png") no-repeat left center !important;
+    background-size: contain !important;
+    width: 160px !important;
+    height: 40px !important;
+    text-indent: -9999px;
     overflow: hidden;
+}
+
+.navbar .navbar-brand {
+    background-color: transparent !important;
 }
 
 /* ITChamps logo area */
