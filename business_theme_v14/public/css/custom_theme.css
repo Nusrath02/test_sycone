@@ -15,7 +15,7 @@
 .widget.onboarding-widget-box * {
     color:#21417b !important;
 }
-.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
+div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
     color: rgb(206, 4, 12) !important;
     font-size: 24px !important;
     font-weight: 700 !important;
