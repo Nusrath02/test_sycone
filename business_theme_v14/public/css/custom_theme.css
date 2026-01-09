@@ -336,3 +336,12 @@ button[aria-label="Help Dropdown"] span {
     max-height: 80vh !important;
     border-radius: 15px !important;
 }
+
+@media (max-width: 991px) {
+    .layout-side-section .overlay-sidebar.opened {
+        transform: translate(0);
+        overflow-y: auto;
+        border-radius: 15px !important;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+    }
+}
