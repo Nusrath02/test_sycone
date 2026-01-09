@@ -397,6 +397,15 @@ button[aria-label="Help Dropdown"] span {
     min-width: 10px !important;
     fill: white !important;
 }
+/* sidebar dropdown overlay */
+.list-sidebar.overlay-sidebar .standard-sidebar-item:hover,
+.list-sidebar.overlay-sidebar .sidebar-item:hover,
+.list-sidebar .module-sidebar-item:hover {
+    background: #2a5298 !important;    /* brighter hover color for sidebar menu item */
+    color: #fff !important;
+    border-radius: 10px !important;
+}
+/* sidebar dropdown overlay end */
 /* sidebar text and icons color  */
 
 .user-action-row > a {
