@@ -49,13 +49,15 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
     padding-bottom: 10px;
 }
 /* shortcut container of shortcut widgets */
-.widget.shortcut-widget-box-wrapper,
-.shortcuts-widget,
-.widget-group {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr); /* 2 per row */
-    gap: 12px; /* spacing between cards */
+.widget.shortcut-widget-box-wrapper {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 12px;
 }
+.widget.shortcut-widget-box {
+    width: calc(50% - 6px); /* exactly 2 per row */
+}
+
 
 
 
