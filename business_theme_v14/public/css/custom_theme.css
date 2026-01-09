@@ -49,17 +49,18 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
     padding-bottom: 10px;
 }
 /* shortcut container of shortcut widgets */
-/* ONLY shortcuts section (below row) */
-.shortcuts-widget .widget.shortcut-widget-box-wrapper {
+/* Top shortcut row container */
+.widget-group .widget.shortcut-widget-box-wrapper {
     display: flex !important;
-    flex-wrap: wrap;
+    flex-wrap: wrap !important;
     gap: 12px;
 }
-
-/* 2 per row */
-.shortcuts-widget .widget.shortcut-widget-box {
-    flex: 0 0 calc(50% - 6px);
+/* Top shortcut cards */
+.widget-group .widget.shortcut-widget-box {
+    flex: 0 0 calc(50% - 6px) !important;
+    max-width: calc(50% - 6px) !important;
 }
+
 
 
 
