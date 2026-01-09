@@ -432,15 +432,4 @@ use.like-icon {
     cursor: pointer;
     stroke: #ffffff;
 }
-/* Custom Loading Screen Styles */
-/* Ensure the gradient covers the entire viewport during loading */
-html {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
-}
 
-/* Override any white backgrounds during page load */
-.page-card,
-.page-head,
-.page-wrapper {
-    background: transparent !important;
-}
