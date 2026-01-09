@@ -247,6 +247,10 @@ footer.footer,
 #awesomplete_list_1 {
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
 }
+/* searchbar dropdown list background hover color  */
+#awesomplete_list_1 li[aria-selected="true"] {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
 /* searchbar dropdown list background color end */
 /* --------------------------------- */
 /* Searchbar text color */
