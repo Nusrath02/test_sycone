@@ -124,38 +124,37 @@ footer.footer,
     display: none !important;
 }
 
-/* Create custom footer container - positioned at bottom of content */
+/* Ensure the page wrapper takes full height */
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+/* Make the main content area grow to push footer down */
+#page-container,
+.page-container,
+#body_div,
+.main-section,
+.layout-main {
+    flex: 1 0 auto;
+}
+
+/* Create custom footer container - sticks to bottom */
 .sycone-custom-footer {
-    position: relative !important;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    flex-shrink: 0;
+    width: 100%;
     background: #052a67 !important;
     padding: 15px 0;
     z-index: 2000;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
-    margin-top: auto; /* This pushes footer to bottom */
-}
-
-/* Ensure body/html take full height */
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-/* Make main layout flex container to push footer down */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-/* Main content should grow to fill space */
-.layout-main,
-.main-section,
-#body {
-    flex: 1 0 auto;
+    margin-top: auto;
 }
 
 /* Footer content wrapper - single row layout */
