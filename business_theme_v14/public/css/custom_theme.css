@@ -433,16 +433,6 @@ use.like-icon {
     stroke: #ffffff;
 }
 /* Custom Loading Screen Styles */
-
-/* Apply gradient background to body and page container during loading */
-body,
-body.loading,
-.page-container,
-.page-loading-wrapper,
-#body {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
-}
-
 /* Ensure the gradient covers the entire viewport during loading */
 html {
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
