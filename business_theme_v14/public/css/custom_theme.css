@@ -6,7 +6,7 @@
     background-color: #ffffff;   /* container background */
     border: 1px solid #e5e7eb;   /* light border */
     border-radius: 16px;         /* rounded container */
-    padding: 20px 24px;
+    padding: 12px 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     color: #dc2626 !important;
 }
