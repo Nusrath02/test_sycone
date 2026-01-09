@@ -31,7 +31,8 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 
 /* shortcut container */
 div.widget.shortcut-widget-box{
-    color:#525252 !important;
+    /* color:#525252 !important; */
+    color:red !important;
     font:14px !important;
     background:#ffffff !important;
     margin: 0px 0px 20px !important;
