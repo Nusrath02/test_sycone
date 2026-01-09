@@ -308,4 +308,19 @@ button[aria-label="Help Dropdown"] span {
     color: #1e3a8a !important;
 }
 /* Navbar dropdown text of Admin end */
+/* Navbar Notification text color */
+.notifications-list .notification-item-tabs .notifications-category.active {
+    color: #1e3a8a !important;
+    border-bottom: 1px solid #1e3a8a !important;
+}
+.notifications-list .notification-item-tabs .notifications-category {
+    color: #1e3a8a !important;
+}
+/* Navbar Notification inner text color  */
+.notifications-list .notification-list-body .notification-null-state .subtitle {
+    color: #1e3a8a !important;
+}
+.dropdown-menu {
+    color: #1e3a8a !important;
+}
 /* Searchbar of Navebar end */
