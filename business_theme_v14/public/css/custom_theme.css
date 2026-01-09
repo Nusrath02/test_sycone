@@ -351,6 +351,12 @@ button[aria-label="Help Dropdown"] span {
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
 }
 
+.standard-sidebar .standard-sidebar-item>a, .desk-sidebar .standard-sidebar-item>a, .search-dialog .search-results .search-sidebar .standard-sidebar-item>a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
 @media (max-width: 991px) {
     .layout-side-section .overlay-sidebar.opened {
         transform: translate(0);
