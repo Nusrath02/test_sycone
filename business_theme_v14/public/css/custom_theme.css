@@ -75,14 +75,14 @@
     background: linear-gradient(135deg, #003366 0%, #004080 100%);
     color: #ffffff;
     padding: 15px 0;
-    position: fixed !important;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 1000;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, opacity 0.3s ease;
 }
+
 /* Footer content wrapper */
 .sycone-footer-content {
     max-width: 1200px;
@@ -94,7 +94,8 @@
     flex-wrap: wrap;
     gap: 15px;
 }
-/* Copyright text - CENTERED */
+
+/* Copyright text */
 .sycone-copyright {
     color: #ffffff;
     font-size: 13px;
@@ -102,17 +103,18 @@
     flex-wrap: wrap;
     gap: 5px;
     align-items: center;
-    flex: 1;
-    justify-content: center;
 }
+
 .sycone-copyright a {
     color: #ffffff;
     text-decoration: none;
     font-weight: 600;
 }
+
 .sycone-copyright a:hover {
     text-decoration: underline;
 }
+
 /* SYConE logo */
 .sycone-footer-logo {
     height: 45px;
@@ -120,9 +122,16 @@
     opacity: 0.95;
     transition: opacity 0.3s ease;
 }
+
 .sycone-footer-logo:hover {
     opacity: 1;
 }
+
+/* Add padding to body to prevent content overlap */
+body {
+    padding-bottom: 60px !important;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .sycone-custom-footer {
@@ -143,6 +152,10 @@
     
     .sycone-footer-logo {
         height: 35px;
+    }
+    
+    body {
+        padding-bottom: 100px !important;
     }
 }
 /* ==================== SYCONE FOOTER END ==================== */
