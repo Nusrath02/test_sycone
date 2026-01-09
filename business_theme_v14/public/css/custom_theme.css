@@ -45,15 +45,12 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 .widget.shortcut-widget-box .widget-title{
     color:#21417b !important;
     font-size: 15px !important;
-     padding-top: 10px;
-    padding-bottom: 10px;
+     /* padding-top: 10px;
+    padding-bottom: 10px; */
+        min-height: 70px;          /* increase overall height */
+    padding: 16px 20px;
 }
-/* shortcut container of shortcut widgets */
-#navbar-breadcrumbs {
-    display: flex !important;
-    align-items: center !important;
-    flex-wrap: wrap !important;
-}
+
 
 
 
