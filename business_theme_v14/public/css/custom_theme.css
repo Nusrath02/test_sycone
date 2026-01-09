@@ -18,6 +18,127 @@
     overflow: hidden;
 }
 
+/* Footer content wrapper - single row layout */
+.sycone-footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
 
+
+/* Copyright text */
+.sycone-copyright {
+    color: #ffffff;
+    font-size: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+}
+
+.sycone-copyright a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sycone-copyright a:hover {
+    text-decoration: underline;
+}
+
+/* SYConE logo */
+.sycone-footer-logo {
+    height: 40px;
+    width: auto;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.sycone-footer-logo:hover {
+    opacity: 1;
+}
+
+/* Add bottom padding to main content to prevent overlap */
+.layout-main-section,
+.main-section,
+.page-container {
+/*     padding-bottom: 80px !important; */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .sycone-custom-footer {
+/*         padding: 12px 0; */
+    }
+    
+    .sycone-footer-content {
+        padding: 0 15px;
+        gap: 10px;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .sycone-social-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .sycone-social-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .sycone-copyright {
+        font-size: 11px;
+        justify-content: center;
+        order: 2;
+    }
+    
+    .sycone-footer-logo {
+        height: 35px;
+        order: 3;
+    }
+    
+    .sycone-social-icons {
+        order: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .layout-main-section,
+    .main-section,
+    .page-container {
+/*         padding-bottom: 100px !important; */
+    }
+}
+
+@media (max-width: 480px) {
+    .sycone-social-icons {
+        gap: 8px;
+    }
+    
+    .sycone-social-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .sycone-social-icon svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .sycone-copyright {
+        font-size: 10px;
+    }
+}
+
+/* footer */
 
 
