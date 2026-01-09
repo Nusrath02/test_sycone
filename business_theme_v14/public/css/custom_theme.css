@@ -139,7 +139,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 
 /* Create custom footer container - sticks to bottom */
 .sycone-custom-footer {
-    position: fixed !important;  /* Changed from relative to fixed */
+    position: relative !important;  /* Changed from relative to fixed */
     bottom: 0;
     left: 0;
     right: 0;
