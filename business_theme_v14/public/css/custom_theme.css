@@ -254,7 +254,6 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 /* ==================== SYCONE FOOTER END ==================== */
 /* Navbar color */
 .navbar {
-    height: 48px;
     background: #052a67 !important;
     border-bottom: 1px solid var(--border-color);
     padding: 0;
