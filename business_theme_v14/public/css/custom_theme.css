@@ -348,7 +348,7 @@ button[aria-label="Help Dropdown"] span {
     text-transform: uppercase;
     cursor: pointer;
     margin-bottom: var(--margin-xs) !important;
-
+    color: white;
 }
 
 .standard-sidebar .standard-sidebar-item>a, .desk-sidebar .standard-sidebar-item>a, .search-dialog .search-results .search-sidebar .standard-sidebar-item>a {
