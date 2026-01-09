@@ -295,4 +295,9 @@ input#navbar-search.form-control {
     text-decoration: none !important;
 }
 /* Navbar navigation link text color white end */
+/* Navber help text in white */
+button[aria-label="Help Dropdown"] span {
+    color: white;
+}
+/* Navber help text in white end */
 /* Searchbar of Navebar end */
