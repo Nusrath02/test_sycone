@@ -38,8 +38,16 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1) !important;
     transition: all 0.3s ease !important;
 }
+
+/* you shortcut container color */
 .widget.shortcut-widget-box .widget-title{
     color:#21417b !important;
+    font-size: 15px !important;
+}
+
+/* small continer removed */
+[data-page-route=Workspaces] .codex-editor .codex-editor__redactor .ce-block .ce-block__content .widget.spacer {
+    display: none;
 }
 
 
