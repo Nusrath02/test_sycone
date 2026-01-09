@@ -423,7 +423,4 @@ use.like-icon {
     cursor: pointer;
     stroke: #ffffff;
 }
-a, a:hover, a:active, a:focus, .btn, div#driver-popover-item .driver-popover-footer button, div#driver-popover-item .driver-popover-footer button.driver-next-btn, div#driver-popover-item .driver-popover-footer button.driver-prev-btn, div#driver-popover-item .driver-popover-footer button.driver-close-btn, div#driver-popover-item .driver-popover-footer button.driver-disabled, .btn:hover, .btn:active, .btn:focus {
-    outline: 0;
-    color: white !important;
-}
+
