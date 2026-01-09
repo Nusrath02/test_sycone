@@ -61,7 +61,8 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
     color:#21417b !important;
 }
 
-..page-actions .btn{
+/* employee list save button color */
+.page-actions .btn{
     background:linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
 }
 /* Abhi */
