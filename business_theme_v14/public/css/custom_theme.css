@@ -26,7 +26,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
  /*your shortcut rport and masters*/
 [data-page-route=Workspaces] .codex-editor .codex-editor__redactor .ce-block .ce-header b {
     font-weight: 600 !important;
-     color: red !important;
+     color: #ce040c !important;
 }
 
 
@@ -52,7 +52,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 
 /* big container heading color */
 .widget.links-widget-box .widget-head .widget-label .widget-title{
-    color:red !important;
+    color:#ce040c !important;
 }
 
 /* small container inside color */
