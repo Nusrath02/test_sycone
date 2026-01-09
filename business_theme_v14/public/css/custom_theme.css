@@ -50,13 +50,13 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 }
 /* shortcut container of shortcut widgets */
 /* Top shortcut row container */
-.widget-group .widget.shortcut-widget-box-wrapper {
+.widget.shortcut-widget-box .widget-title{
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 12px;
 }
 /* Top shortcut cards */
-.widget-group .widget.shortcut-widget-box {
+.widget.shortcut-widget-box .widget-title{
     flex: 0 0 calc(50% - 6px) !important;
     max-width: calc(50% - 6px) !important;
 }
