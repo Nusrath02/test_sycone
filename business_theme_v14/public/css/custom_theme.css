@@ -23,14 +23,11 @@
 
 
 /* shortcutpart */
-
-.ce-block__content{
-color: #ce040c !important;
+ /*your shortcut rport and masters*/
+[data-page-route=Workspaces] .codex-editor .codex-editor__redactor .ce-block .ce-header b {
+    font-weight: 600 !important;
+     color: red !important;
 }
-
-/* .ce-block.col-xs-12 .ce-header span {
-    color: #ce040c !important;
-} */
 
 
 /* Abhi */
