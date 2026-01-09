@@ -311,3 +311,13 @@ button[aria-label="Help Dropdown"] span {
     color: #1e3a8a !important;
 }
 /* Searchbar of Navebar end */
+
+
+/* sidebar */
+.layout-side-section {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-regular);
+    letter-spacing: .02em;
+    padding-right: 30px;
+    background-color: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+}
