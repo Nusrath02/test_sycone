@@ -401,8 +401,8 @@ button[aria-label="Help Dropdown"] span {
 .list-sidebar.overlay-sidebar .standard-sidebar-item:hover,
 .list-sidebar.overlay-sidebar .sidebar-item:hover,
 .list-sidebar .module-sidebar-item:hover {
-    background: #2a5298 !important;    /* brighter hover color for sidebar menu item */
-    color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #000 !important;
     border-radius: 10px !important;
 }
 /* sidebar dropdown overlay end */
