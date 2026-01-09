@@ -31,14 +31,14 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 
 
 /* shortcut container */
-.widget.links-widget-box .widget-head .widget-label .widget-title{
-    /* color:#525252 !important; */
+/* .widget.links-widget-box .widget-head .widget-label .widget-title{
+    color:#525252 !important;
     color:red !important;
     font:14px !important;
     background:#ffffff !important;
     margin: 0px 0px 20px !important;
     padding:6px 8px !important;
-}
+} */
 
 .layout-main-section .widget, .layout-main-section [data-widget-name] {
     /* color: #525252 !important; */
