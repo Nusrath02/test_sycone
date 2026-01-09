@@ -53,10 +53,9 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 .layout-main-section .widget, .layout-main-section [data-widget-name] {
     color: red !important;
     font: 14px !important;
-    background: #e23f3f !important;
+    background: #ffffff !important;
     margin: 0px 0px 20px !important;
     padding: 6px 8px !important;
-    background: :#ffffff;
 }
 
 
