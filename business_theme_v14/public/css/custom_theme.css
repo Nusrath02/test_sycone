@@ -301,4 +301,10 @@ button[aria-label="Help Dropdown"] span {
     color: white;
 }
 /* Navber help text in white end */
+/* Navbar dropdown text of Admin */
+.navbar .navbar-nav .dropdown-item {
+    padding: 6px 8px !important;
+    color: #1e3a8a !important;
+}
+/* Navbar dropdown text of Admin end */
 /* Searchbar of Navebar end */
