@@ -211,3 +211,11 @@ footer.footer,
 }
 
 /* ==================== SYCONE FOOTER END ==================== */
+/* Navbar color */
+.navbar {
+    height: 48px;
+    background: #052a67 !important;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0;
+}
+/* Navbar color  end */
