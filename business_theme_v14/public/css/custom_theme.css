@@ -234,4 +234,9 @@ footer.footer,
     letter-spacing: .02em;
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
 }
+/* Searchbar text color */
+input#navbar-search.form-control {
+    color: white;
+}
+/* Searchbar text color end */
 /* Searchbar of Navebar end */
