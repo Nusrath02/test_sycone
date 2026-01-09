@@ -12,9 +12,11 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     color: #dc2626 !important;
 }
+/* above text color */
 .widget.onboarding-widget-box * {
     color:#21417b !important;
 }
+/* text color */
 div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
     color: rgb(206, 4, 12) !important;
     font-size: 24px !important;
@@ -43,7 +45,10 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 .widget.shortcut-widget-box .widget-title{
     color:#21417b !important;
     font-size: 15px !important;
+     padding-top: 10px;
+    padding-bottom: 10px;
 }
+
 
 /* small continer removed */
 [data-page-route=Workspaces] .codex-editor .codex-editor__redactor .ce-block .ce-block__content .widget.spacer {
