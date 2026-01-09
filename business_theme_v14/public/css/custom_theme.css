@@ -338,6 +338,19 @@ button[aria-label="Help Dropdown"] span {
     border-radius: 15px !important;
 }
 
+[data-page-route=Workspaces] .standard-sidebar-item {
+    justify-content: space-between;
+    padding: 0;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+}
+.desk-sidebar .standard-sidebar-label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: var(--margin-xs) !important;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+}
+
 @media (max-width: 991px) {
     .layout-side-section .overlay-sidebar.opened {
         transform: translate(0);
