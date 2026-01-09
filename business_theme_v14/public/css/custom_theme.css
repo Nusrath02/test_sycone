@@ -401,3 +401,24 @@ button[aria-label="Help Dropdown"] span {
     min-width: 10px !important;
     fill: white !important;
 }
+/* sidebar text and icons color  */
+
+.user-action-row > a {
+    color: #ffffff;
+    cursor: pointer;
+}
+.text-body, .text-muted, .node-title.text-muted.ellipsis, .small.text-muted, div#driver-popover-item .driver-popover-footer button.driver-close-btn {
+    color: #fefefe !important;
+}
+.modified-by, .modified-by a {
+    color: #ffffff !important;
+}
+.created-by {
+    color: #ffffff !important;
+}
+a.pill-label.ellipsis.explore-link {
+    color: white !important;
+}
+span.share-label {
+    color: white !important;
+}
