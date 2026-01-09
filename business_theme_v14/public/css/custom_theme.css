@@ -18,6 +18,12 @@
     overflow: hidden;
 }
 
+/* ITChamps logo area */
+.navbar-brand,
+.navbar .navbar-brand {
+    background-color: transparent !important;
+}
+
 /* Footer content wrapper - single row layout */
 .sycone-footer-content {
     max-width: 1200px;
