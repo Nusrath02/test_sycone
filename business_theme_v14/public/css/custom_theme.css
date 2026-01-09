@@ -288,6 +288,13 @@ input#navbar-search.form-control {
     color: white;
 }
 /* searchbar placeholder */
+/* Searchbar dropdown hover color */
+/* Hover highlight */
+#awesomplete_list_1 li:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #000 !important;
+}
+/* Searchbar dropdown hover color end */
 /* ------------------ */
 /* Navbar bell icon color (white) */
 .navbar .es-icon.icon-sm {
@@ -370,4 +377,12 @@ button[aria-label="Help Dropdown"] span {
         border-radius: 15px !important;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
     }
+}
+
+/* sidebar icon color white */
+.list-sidebar.overlay-sidebar .sidebar-item .icon, .list-sidebar.overlay-sidebar .standard-sidebar-item .icon {
+    font-size: 8px !important;
+    margin-right: 3px !important;
+    min-width: 10px !important;
+    fill: white !important;
 }
