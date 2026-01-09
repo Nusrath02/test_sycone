@@ -10,7 +10,9 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     color: #dc2626 !important;
 }
-
+div.widget.onboarding-widget-box{
+    color:#21417B !important;
+}
 
 
 /* Abhi */
