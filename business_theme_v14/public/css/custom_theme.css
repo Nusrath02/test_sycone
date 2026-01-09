@@ -348,7 +348,7 @@ button[aria-label="Help Dropdown"] span {
     text-transform: uppercase;
     cursor: pointer;
     margin-bottom: var(--margin-xs) !important;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+
 }
 
 .standard-sidebar .standard-sidebar-item>a, .desk-sidebar .standard-sidebar-item>a, .search-dialog .search-results .search-sidebar .standard-sidebar-item>a {
