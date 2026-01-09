@@ -115,31 +115,38 @@ footer.footer,
     display: none !important;
 }
 
-/* Create custom footer container - FIXED at bottom */
+/* Create custom footer container - positioned at bottom of content */
 .sycone-custom-footer {
-    position: fixed !important;  /* Changed from relative to fixed */
+    position: relative !important;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
     background: #052a67 !important;
     padding: 15px 0;
     z-index: 2000;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
+    margin-top: auto; /* This pushes footer to bottom */
 }
 
-/* Add padding to body/main content to prevent overlap with fixed footer */
+/* Ensure body/html take full height */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Make main layout flex container to push footer down */
 body {
-    padding-bottom: 70px !important; /* Adjust based on your footer height */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-/* Or target specific layout containers */
-.layout-main-section,
+/* Main content should grow to fill space */
+.layout-main,
 .main-section,
-.page-container,
-.layout-main {
-    padding-bottom: 70px !important;
+#body {
+    flex: 1 0 auto;
 }
 
 /* Footer content wrapper - single row layout */
@@ -220,14 +227,6 @@ body {
     
     .sycone-social-icons {
         order: 1;
-    }
-    
-    /* Adjust padding for mobile */
-    body,
-    .layout-main-section,
-    .main-section,
-    .page-container {
-        padding-bottom: 120px !important;
     }
 }
 
