@@ -251,6 +251,10 @@ footer.footer,
 #awesomplete_list_1 li[aria-selected="true"] {
     background-color: rgba(255, 255, 255, 0.15) !important;
 }
+/* searchbar dropdown list background color text only */
+#awesomplete_list_1, #awesomplete_list_1 li, #awesomplete_list_1 li a, #awesomplete_list_1 span {
+    color: white !important;
+}
 /* searchbar dropdown list background color end */
 /* --------------------------------- */
 /* Searchbar text color */
