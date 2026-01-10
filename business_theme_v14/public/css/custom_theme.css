@@ -4,9 +4,11 @@ span.ellipsis{
 /* .level-right{
     color:black !important;
 } */
-.ce-block.col-xs-12 .ce-header{
-    color:red !important;
+/* Make widget title text red */
+.widget-title .ellipsis {
+    color: red !important;
 }
+
 
 /* Abhi */
 div.widget number-widget-box{
