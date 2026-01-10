@@ -1,3 +1,18 @@
+.layout-side-section,
+.list-sidebar,
+.list-sidebar.overlay-sidebar,
+.desk-sidebar {
+    color: #ffffff !important;
+}
+
+
+
+.layout-side-section *,
+.list-sidebar *,
+.list-sidebar.overlay-sidebar *,
+.desk-sidebar * {
+    color: #ffffff !important;
+}
 /* Abhi */
 
 
