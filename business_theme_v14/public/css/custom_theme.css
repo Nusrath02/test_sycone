@@ -14,7 +14,7 @@
 }
 /* above text color */
 .widget.onboarding-widget-box * {
-    color:#21417b !important;
+    /* color:#21417b !important; */
 }
 /* text color */
 div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
@@ -43,7 +43,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 
 /* you shortcut container color */
 .widget.shortcut-widget-box .widget-title{
-    color:#21417b !important;
+    /* color:#21417b !important; */
     font-size: 15px !important;
      padding-top: 10px;
     padding-bottom: 10px;
@@ -74,7 +74,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 /* small container inside color */
 
 .widget.links-widget-box .link-item {
-    color:#21417b !important;
+    /* color:#21417b !important; */
 }
 
 /* employee list save button color */
