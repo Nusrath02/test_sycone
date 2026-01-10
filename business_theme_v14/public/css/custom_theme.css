@@ -1,3 +1,17 @@
+/* Make only the list header field black */
+header.level.list-row-head {
+    background-color: #000000 !important;
+}
+
+
+
+
+
+
+
+
+
+
 
 /* sidebar */
 /* Make all text inside the overlay sidebar white */
@@ -27,7 +41,7 @@
 
 /* Abhi */
 div.widget number-widget-box{
-    /* color:#21417b !important; */
+    color:#21417b !important;
 }
 
 /* shortcut above container */
@@ -44,7 +58,7 @@ div.widget number-widget-box{
 }
 /* above text color */
 .widget.onboarding-widget-box * {
-    /* color:#21417b !important; */
+    color:#21417b !important;
 }
 /* text color */
 div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
@@ -103,25 +117,32 @@ span.ellipsis.widget.links-widget-box .widget-head .widget-label .widget-title{
 
 /* small container inside color */
 
-/* .widget.links-widget-box .link-item {
+.widget.links-widget-box .link-item {
     color:#21417b !important;
-} */
+}
 span.ellipsis{
     color: #21417b !important;
 }
 /* Make widget title text red */
-}
-/* Only Stock widget title */
-.widget-title .ellipsis {
-    color: #ce040c !important;
-}
-/* Make shortcut widget text black */
-/* Only shortcut widgets text → black */
-.get-links-widget-box 
-.widget.shortcut-widget-box 
-span.ellipsis {
+/* 🔵 Your Shortcuts - Item shortcut */
+.widget.shortcut-widget-box .widget-title,
+.widget.shortcut-widget-box .widget-label,
+.widget.shortcut-widget-box span {
     color: #21417b !important;
 }
+/* 🔴 Reports & Masters - COMPLETE Stock widget only */
+div[data-card-name="Stock"] {
+    color: #ce040c !important;
+}
+
+/* Ensure all inner text inherits the color */
+div[data-card-name="Stock"] * {
+    color: #ce040c !important;
+}
+
+
+
+
 
 
 
