@@ -8,11 +8,13 @@
     color: #ffffff !important;
 }
 
-.form-sidebar.overlay-sidebar svg,
-.form-sidebar.overlay-sidebar i {
+/* Make all sidebar SVG icons white */
+.form-sidebar.overlay-sidebar svg {
     fill: #ffffff !important;
+    stroke: #ffffff !important;
     color: #ffffff !important;
 }
+
 
 
 /* .level-right{
@@ -106,9 +108,12 @@ span.ellipsis{
     color: #21417b !important;
 }
 /* Make widget title text red */
-.widget-title .ellipsis {
+}
+/* Only Stock widget title */
+[card_name="Stock"] .widget-title .ellipsis {
     color: #ce040c !important;
 }
+
 
 /* employee list save button color */
 .page-actions .btn{
