@@ -1,13 +1,17 @@
-span.ellipsis{
-    color: #21417b !important;
+/* Make all text inside the overlay sidebar white */
+.form-sidebar.overlay-sidebar {
+    color: #ffffff !important;
 }
+
+/* Force all child elements text to white */
+.form-sidebar.overlay-sidebar * {
+    color: #ffffff !important;
+}
+
 /* .level-right{
     color:black !important;
 } */
-/* Make widget title text red */
-.widget-title .ellipsis {
-    color: red !important;
-}
+
 
 
 /* Abhi */
@@ -90,6 +94,13 @@ span.ellipsis.widget.links-widget-box .widget-head .widget-label .widget-title{
 
 .widget.links-widget-box .link-item {
     color:#21417b !important;
+}
+span.ellipsis{
+    color: #21417b !important;
+}
+/* Make widget title text red */
+.widget-title .ellipsis {
+    color: #ce040c !important;
 }
 
 /* employee list save button color */
