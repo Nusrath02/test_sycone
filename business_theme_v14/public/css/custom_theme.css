@@ -3,6 +3,15 @@ header.level.list-row-head {
     background-color: #000000 !important;
     color:white !important;
 }
+/* ONLY shortcut widget text → black */
+.widget.shortcut-widget-box > .ellipsis {
+    color: #21417b !important;
+}
+/* Make widget title text red */
+.widget-title .ellipsis {
+    color: red !important;
+}
+
 
 
 
@@ -88,7 +97,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 
 /* you shortcut container color */
 .widget.shortcut-widget-box .widget-title{
-    /* color:#21417b !important; */
+    color:#21417b !important;
     font-size: 15px !important;
      padding-top: 10px;
     padding-bottom: 10px;
@@ -124,22 +133,7 @@ span.ellipsis.widget.links-widget-box .widget-head .widget-label .widget-title{
 span.ellipsis{
     color: #21417b !important;
 }
-/* Make widget title text red */
-/* 🔵 Your Shortcuts - Item shortcut */
-.widget.shortcut-widget-box .widget-title,
-.widget.shortcut-widget-box .widget-label,
-.widget.shortcut-widget-box span {
-    color: #21417b !important;
-}
-/* 🔴 Reports & Masters - COMPLETE Stock widget only */
-div[data-card-name="Stock"] {
-    color: #ce040c !important;
-}
 
-/* Ensure all inner text inherits the color */
-div[data-card-name="Stock"] * {
-    color: #ce040c !important;
-}
 
 
 
