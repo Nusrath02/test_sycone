@@ -1,7 +1,9 @@
 span.ellipsis{
     color: #21417b !important;
 }
-
+.list-count{
+    color:black !important;
+}
 
 /* Abhi */
 div.widget number-widget-box{
