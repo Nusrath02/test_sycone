@@ -1,10 +1,10 @@
 span.ellipsis{
     color: #21417b !important;
 }
-.level-right{
+/* .level-right{
     color:black !important;
-}
-..ce-block.col-xs-12 .ce-header{
+} */
+.ce-block.col-xs-12 .ce-header{
     color:red !important;
 }
 
