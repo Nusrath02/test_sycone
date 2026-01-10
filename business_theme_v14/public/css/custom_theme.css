@@ -1,8 +1,11 @@
 span.ellipsis{
     color: #21417b !important;
 }
-span.list-count{
+.header.level.list-row-head.text-muted{
     color:black !important;
+}
+.widget.links-widget-box .widget-head .widget-label .widget-title{
+    color:red !important;
 }
 
 /* Abhi */
