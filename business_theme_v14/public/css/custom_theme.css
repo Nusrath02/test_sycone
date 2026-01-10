@@ -395,11 +395,42 @@ button[aria-label="Help Dropdown"] span {
     outline: none !important; 
 }
 
-[data-page-route=Workspaces] .standard-sidebar-item {
-    justify-content: space-between;
-    padding: 0;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+/* ✅ ADD THIS NEW SECTION RIGHT AFTER .layout-side-section */
+/* Remove sidebar border lines completely */
+.col-lg-2.layout-side-section,
+div.list-sidebar.overlay-sidebar.hidden-xs.hidden-sm.opened {
+    border: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
+
+/* Remove borders from overlay sidebar when opened */
+.layout-side-section .overlay-sidebar.opened {
+    transform: translate(0);
+    overflow-y: auto;
+    border-radius: 15px !important;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+    color: white !important;
+    
+    /* ✅ ADD THESE LINES */
+    border: none !important;
+    border-right: none !important;
+    outline: none !important;
+}
+
+/* Remove any pseudo-element borders */
+.list-sidebar.overlay-sidebar::before,
+.list-sidebar.overlay-sidebar::after,
+.col-lg-2.layout-side-section::before,
+.col-lg-2.layout-side-section::after {
+    display: none !important;
+    border: none !important;
+}
+
 .desk-sidebar .standard-sidebar-label {
     font-size: var(--text-xs);
     text-transform: uppercase;
