@@ -80,7 +80,18 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 /* employee list save button color */
 .page-actions .btn{
     background:linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+    color:white !important;
 }
+
+/* Accounting */
+.widget.number-widget-box .widget-body .widget-content .number{
+    color:#21417b !important;
+}
+.layout-main-section .widget .widget-head{
+    color:#21417b !important;
+}
+
+
 /* Abhi */
 
 
