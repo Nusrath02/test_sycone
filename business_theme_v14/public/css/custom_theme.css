@@ -3,14 +3,7 @@ header.level.list-row-head {
     background-color: #000000 !important;
     color:white !important;
 }
-/* ONLY shortcut widget text → black */
-.widget.shortcut-widget-box > .ellipsis {
-    color: #21417b !important;
-}
-/* Make widget title text red */
-.widget-title .ellipsis {
-    color: red !important;
-}
+
 
 
 
