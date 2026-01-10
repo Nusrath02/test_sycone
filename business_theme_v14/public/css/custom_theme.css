@@ -1,14 +1,39 @@
 /* Make only the list header field black */
 header.level.list-row-head {
-    background-color: #000000 !important;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
     color:white !important;
 }
 
 
-.list-sidebar.overlay-sidebar {
-    border-right: none !important;
+/* 🔥 REMOVE SIDEBAR RIGHT WHITE LINE (FINAL FIX) */
+.layout-side-section,
+.list-sidebar,
+.list-sidebar.overlay-sidebar,
+.list-sidebar.overlay-sidebar.opened {
+    border: none !important;
     box-shadow: none !important;
+    outline: none !important;
 }
+
+/* Remove scrollbar track causing the line */
+.layout-side-section::-webkit-scrollbar,
+.list-sidebar::-webkit-scrollbar {
+    width: 0 !important;
+    background: transparent !important;
+}
+
+/* Remove scrollbar track background */
+.layout-side-section::-webkit-scrollbar-track,
+.list-sidebar::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+/* Firefox */
+.layout-side-section,
+.list-sidebar {
+    scrollbar-width: none !important;
+}
+
 
 
 
