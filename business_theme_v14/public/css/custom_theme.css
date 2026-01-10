@@ -1,11 +1,5 @@
-li.sidebar-label{
+svg.icon icon-sm{
     color:white !important;
-}
-a.add-group-by{
-    color:white !important;
-}
-a.list-tag-preview{
-    color:white !importantt;
 }
 
 
@@ -116,6 +110,18 @@ svg.es-icon.icon-md.sidebar-toggle-placeholder,
 svg.es-icon.icon-md.sidebar-toggle-placeholder use {
     fill: #000000 !important;
     stroke: #000000 !important;
+}
+
+/* sidebar 2nd part color */
+
+li.sidebar-label{
+    color:white !important;
+}
+a.add-group-by{
+    color:white !important;
+}
+a.list-tag-preview{
+    color:white !important;
 }
 
 
