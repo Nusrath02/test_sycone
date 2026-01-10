@@ -399,7 +399,7 @@ button[aria-label="Help Dropdown"] span {
 }
 
 
-@media (max-width: 991px) {
+{
     .layout-side-section .overlay-sidebar.opened {
         transform: translate(0);
         overflow-y: auto;
