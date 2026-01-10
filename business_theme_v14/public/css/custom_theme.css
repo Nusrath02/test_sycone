@@ -1,18 +1,3 @@
-/* 🔥 Make ONLY page header action icons white */
-.page-actions .standard-actions .menu-btn-group .icon-btn i {
-    color: #ffffff !important;
-}
-.page-actions .standard-actions .menu-btn-group .icon-btn i::before {
-    color: #ffffff !important;
-}
-.page-actions .standard-actions .menu-btn-group .icon-btn {
-    opacity: 1 !important;
-}
-.page-head .page-actions button i {
-    color: #ffffff !important;
-}
-
-
 
 
 /* Make only the list header field black */
