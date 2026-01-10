@@ -1,22 +1,3 @@
-/* ✅ Keep sidebar text white */
-.layout-side-section,
-.list-sidebar,
-.list-sidebar.overlay-sidebar,
-.desk-sidebar {
-    color: #ffffff !important;
-}
-
-/* ✅ Force input & dropdown text to BLACK */
-.layout-side-section input,
-.layout-side-section textarea,
-.layout-side-section select,
-.layout-side-section .form-control,
-.layout-side-section .awesomplete input,
-.layout-side-section .dropdown-menu,
-.layout-side-section .dropdown-menu * {
-    color: #000000 !important;
-}
-
 /* Abhi */
 
 
