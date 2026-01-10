@@ -1,3 +1,30 @@
+/* synk */
+.widget.dashboard-widget-box .widget-subtitle {
+    font-size: 0.75rem;
+/*     color: #e14040 !important; */
+    color: #21417b !important;
+    margin-top: var(--margin-xs);
+}
+.widget.dashboard-widget-box .widget-subtitle.widget.dashboard-widget-box .widget-subtitle{
+color: #21417b !important;
+}
+.widget.onboarding-widget-box .widget-head .widget-subtitle {
+    color: #21417b !important
+}
+.widget.quick-list-widget-box .widget-footer .see-all {
+    width: 100%;
+    background-color: var(--btn-default-bg);
+    text-decoration: none;
+    color: #21417b !important;
+}
+.text-body, .text-muted, div#driver-popover-item .driver-popover-footer button.driver-close-btn {
+    color: #21417b !important;
+}
+
+
+
+
+
 /* Abhi */
 div.widget number-widget-box{
     color:#21417b !important;
