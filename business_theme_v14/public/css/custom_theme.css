@@ -1,5 +1,5 @@
-svg.icon icon-sm{
-    stroke:white !important;
+.flex col page-actions justify-content-end{
+    color:white !important;
 }
 /* Hide scrollbar but keep scrolling */
 .list-sidebar.overlay-sidebar.hidden-xs.hidden-sm.opened {
