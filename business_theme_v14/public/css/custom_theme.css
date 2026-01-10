@@ -100,6 +100,14 @@ svg{
         stroke: white !important;
 }
 
+/* Sidebar toggle icon → black */
+svg.es-icon.icon-md.sidebar-toggle-placeholder,
+svg.es-icon.icon-md.sidebar-toggle-placeholder use {
+    fill: #000000 !important;
+    stroke: #000000 !important;
+}
+
+
 /* Abhi */
 
 
