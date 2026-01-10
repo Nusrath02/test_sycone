@@ -390,45 +390,6 @@ button[aria-label="Help Dropdown"] span {
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
     max-height: 80vh !important;
     border-radius: 15px !important;
-        border: none !important;           /* ← ADD THIS */
-    border-right: none !important;     /* ← ADD THIS */
-    outline: none !important; 
-}
-
-/* ✅ ADD THIS NEW SECTION RIGHT AFTER .layout-side-section */
-/* Remove sidebar border lines completely */
-.col-lg-2.layout-side-section,
-div.list-sidebar.overlay-sidebar.hidden-xs.hidden-sm.opened {
-    border: none !important;
-    border-right: none !important;
-    border-left: none !important;
-    border-top: none !important;
-    border-bottom: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* Remove borders from overlay sidebar when opened */
-.layout-side-section .overlay-sidebar.opened {
-    transform: translate(0);
-    overflow-y: auto;
-    border-radius: 15px !important;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
-    color: white !important;
-    
-    /* ✅ ADD THESE LINES */
-    border: none !important;
-    border-right: none !important;
-    outline: none !important;
-}
-
-/* Remove any pseudo-element borders */
-.list-sidebar.overlay-sidebar::before,
-.list-sidebar.overlay-sidebar::after,
-.col-lg-2.layout-side-section::before,
-.col-lg-2.layout-side-section::after {
-    display: none !important;
-    border: none !important;
 }
 
 .desk-sidebar .standard-sidebar-label {
