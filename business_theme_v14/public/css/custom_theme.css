@@ -1,3 +1,4 @@
+/* 🔥 Global sidebar text color */
 .layout-side-section,
 .list-sidebar,
 .list-sidebar.overlay-sidebar,
@@ -5,8 +6,7 @@
     color: #ffffff !important;
 }
 
-
-
+/* 🔥 Force all inner sidebar elements to white */
 .layout-side-section *,
 .list-sidebar *,
 .list-sidebar.overlay-sidebar *,
