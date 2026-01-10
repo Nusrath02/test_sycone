@@ -1,20 +1,3 @@
-button.btn btn-default icon-btn{
-    color:white !important;
-}
-/* Remove ONLY the sidebar scrollbar line */
-.list-sidebar.overlay-sidebar.hidden-xs.hidden-sm.opened {
-    overflow-y: auto;            /* keep scroll working */
-    scrollbar-width: none;       /* Firefox */
-    -ms-overflow-style: none;    /* Edge / IE */
-}
-
-.list-sidebar.overlay-sidebar.hidden-xs.hidden-sm.opened::-webkit-scrollbar {
-    width: 0 !important;
-    background: transparent;
-}
-
-
-
 /* Abhi */
 
 
@@ -92,7 +75,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 /* small container inside color */
 
 .widget.links-widget-box .link-item {
-    /* color:#21417b !important; */
+    color:#21417b !important;
 }
 
 /* employee list save button color */
@@ -107,14 +90,6 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 }
 .widget-label{
     color:#21417b !important;
-}
-
-/* sidebar icon color */
-.es-icon{
-    stroke: #f2e7e7 !important;
-}
-svg{
-        stroke: white !important;
 }
 
 /* Sidebar toggle icon → black */
@@ -415,6 +390,9 @@ button[aria-label="Help Dropdown"] span {
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
     max-height: 80vh !important;
     border-radius: 15px !important;
+        border: none !important;           /* ← ADD THIS */
+    border-right: none !important;     /* ← ADD THIS */
+    outline: none !important; 
 }
 
 [data-page-route=Workspaces] .standard-sidebar-item {
