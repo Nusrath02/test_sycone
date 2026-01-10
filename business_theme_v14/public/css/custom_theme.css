@@ -92,6 +92,13 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
     color:#21417b !important;
 }
 
+/* sidebar icon color */
+.es-icon{
+    stroke: #f2e7e7 !important;
+}
+.svg:not(:root){
+   stroke: #f2e7e7 !important; 
+}
 
 /* Abhi */
 
@@ -398,6 +405,8 @@ button[aria-label="Help Dropdown"] span {
         overflow-y: auto;
         border-radius: 15px !important;
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+        color:white !important;
+        /* //a sidebar txt clr */
     }
 }
 
