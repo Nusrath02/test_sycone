@@ -1,35 +1,17 @@
-/* 🔹 Make page action icons white */
-.page-actions svg,
-.page-actions i,
-.page-actions .icon,
-.page-actions .btn svg {
-    color: #ffffff !important;
-    fill: #ffffff !important;
-}
-/* 🔹 White icons only inside page actions buttons */
-.page-actions .btn svg,
-.page-actions .btn i {
-    color: #ffffff !important;
-    fill: #ffffff !important;
-}
-.page-actions .icon-md,
-.page-actions .icon-sm {
-    color: #ffffff !important;
-    fill: #ffffff !important;
-}
-
-
-
-
-
-/* Make top-right menu icon white */
-.menu-btn-group .icon.icon-sm {
-    fill: #ffffff !important;
-    stroke: #ffffff !important;
-}
-.menu-btn-group {
+/* 🔥 Make ONLY page header action icons white */
+.page-actions .standard-actions .menu-btn-group .icon-btn i {
     color: #ffffff !important;
 }
+.page-actions .standard-actions .menu-btn-group .icon-btn i::before {
+    color: #ffffff !important;
+}
+.page-actions .standard-actions .menu-btn-group .icon-btn {
+    opacity: 1 !important;
+}
+.page-head .page-actions button i {
+    color: #ffffff !important;
+}
+
 
 
 
