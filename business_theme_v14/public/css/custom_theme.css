@@ -15,7 +15,7 @@
 }
 /* above text color */
 .widget.onboarding-widget-box * {
-    /* color:#21417b !important; */
+    color:#21417b !important;
 }
 /* text color */
 div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
@@ -44,7 +44,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 
 /* you shortcut container color */
 .widget.shortcut-widget-box .widget-title{
-    /* color:#21417b !important; */
+    color:#21417b !important;
     font-size: 15px !important;
      padding-top: 10px;
     padding-bottom: 10px;
@@ -88,7 +88,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 .widget.number-widget-box .widget-body .widget-content .number{
     color:#21417b !important;
 }
-.layout-main-section .widget .widget-head{
+.widget-label{
     color:#21417b !important;
 }
 
