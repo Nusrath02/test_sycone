@@ -110,8 +110,12 @@ span.ellipsis{
 /* Make widget title text red */
 }
 /* Only Stock widget title */
-[card_name="Stock"] .widget-title .ellipsis {
+.widget-title .ellipsis {
     color: #ce040c !important;
+}
+/* Make shortcut widget text black */
+.widget.shortcut-widget-box .ellipsis {
+    color: #21417b !important;
 }
 
 
