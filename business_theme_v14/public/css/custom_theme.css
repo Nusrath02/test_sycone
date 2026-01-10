@@ -5,6 +5,10 @@ header.level.list-row-head {
 }
 
 
+.list-sidebar.overlay-sidebar {
+    border-right: none !important;
+    box-shadow: none !important;
+}
 
 
 
