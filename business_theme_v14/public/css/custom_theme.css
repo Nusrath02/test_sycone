@@ -96,8 +96,8 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 .es-icon{
     stroke: #f2e7e7 !important;
 }
-.svg:not(:root){
-   stroke: #f2e7e7 !important; 
+svg{
+        stroke: white !important;
 }
 
 /* Abhi */
