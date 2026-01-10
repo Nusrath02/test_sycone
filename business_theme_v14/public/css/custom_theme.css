@@ -1,3 +1,5 @@
+
+/* sidebar */
 /* Make all text inside the overlay sidebar white */
 .form-sidebar.overlay-sidebar {
     color: #ffffff !important;
@@ -14,7 +16,7 @@
     stroke: #ffffff !important;
     color: #ffffff !important;
 }
-
+/* sidebar */
 
 
 /* .level-right{
@@ -25,7 +27,7 @@
 
 /* Abhi */
 div.widget number-widget-box{
-    color:#21417b !important;
+    /* color:#21417b !important; */
 }
 
 /* shortcut above container */
@@ -42,7 +44,7 @@ div.widget number-widget-box{
 }
 /* above text color */
 .widget.onboarding-widget-box * {
-    color:#21417b !important;
+    /* color:#21417b !important; */
 }
 /* text color */
 div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
@@ -71,7 +73,7 @@ div.widget.onboarding-widget-box .widget-body .onboarding-step-preview h1{
 
 /* you shortcut container color */
 .widget.shortcut-widget-box .widget-title{
-    color:#21417b !important;
+    /* color:#21417b !important; */
     font-size: 15px !important;
      padding-top: 10px;
     padding-bottom: 10px;
@@ -101,9 +103,9 @@ span.ellipsis.widget.links-widget-box .widget-head .widget-label .widget-title{
 
 /* small container inside color */
 
-.widget.links-widget-box .link-item {
+/* .widget.links-widget-box .link-item {
     color:#21417b !important;
-}
+} */
 span.ellipsis{
     color: #21417b !important;
 }
@@ -114,9 +116,13 @@ span.ellipsis{
     color: #ce040c !important;
 }
 /* Make shortcut widget text black */
-.widget.shortcut-widget-box .ellipsis {
+/* Only shortcut widgets text → black */
+.get-links-widget-box 
+.widget.shortcut-widget-box 
+span.ellipsis {
     color: #21417b !important;
 }
+
 
 
 /* employee list save button color */
