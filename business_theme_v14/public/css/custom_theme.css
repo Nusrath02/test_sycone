@@ -1,6 +1,17 @@
 button.btn btn-default icon-btn{
     color:white !important;
 }
+/* Remove ONLY the sidebar scrollbar line */
+.list-sidebar.overlay-sidebar.hidden-xs.hidden-sm.opened {
+    overflow-y: auto;            /* keep scroll working */
+    scrollbar-width: none;       /* Firefox */
+    -ms-overflow-style: none;    /* Edge / IE */
+}
+
+.list-sidebar.overlay-sidebar.hidden-xs.hidden-sm.opened::-webkit-scrollbar {
+    width: 0 !important;
+    background: transparent;
+}
 
 
 
