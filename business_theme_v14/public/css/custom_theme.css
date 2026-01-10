@@ -8,6 +8,13 @@
     color: #ffffff !important;
 }
 
+.form-sidebar.overlay-sidebar svg,
+.form-sidebar.overlay-sidebar i {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+}
+
+
 /* .level-right{
     color:black !important;
 } */
