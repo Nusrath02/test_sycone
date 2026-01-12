@@ -1,14 +1,32 @@
 /* icon white sm cn color */
-/* 🔥 OVERRIDE existing menu-btn-group color (DESKTOP FIX) */
-body .page-actions .menu-btn-group {
-    color: #ffffff !important;
+.icon, svg, img[class*="icon"] {
+    filter: brightness(0) invert(1);
+}
+svg {
+    fill: white;
+    color: white;
 }
 
-/* Ensure SVG follows the parent color */
-body .page-actions .menu-btn-group svg,
-body .page-actions .menu-btn-group svg use {
-    fill: currentColor !important;
-    stroke: currentColor !important;
+/* For icon fonts like Font Awesome */
+.icon, [class*="icon-"] {
+    color: white !important;
+}
+.es-icon {
+    color: white !important;
+}
+
+.page-icon-group svg,
+.menu-btn-group svg,
+.custom-actions svg {
+    fill: white;
+    color: white;
+}
+
+/* For any button icons */
+button svg,
+button .icon {
+    fill: white;
+    color: white;
 }
 
 
