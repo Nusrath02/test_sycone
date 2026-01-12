@@ -2050,4 +2050,11 @@ ul[id^="awesomplete_list"] {
     font-size: 52px;
     border-radius: var(--border-radius-lg);
 }
+@media (max-width: 991px) {
+    .layout-side-section .overlay-sidebar.opened {
+        transform: translate(0);
+        overflow-y: auto;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+    }
+}
 /* side image size alignmnet  end */
