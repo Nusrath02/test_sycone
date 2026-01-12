@@ -1,21 +1,16 @@
 /* icon white sm cn color */
-/* 🔥 DESKTOP ONLY – Force menu icon to WHITE */
-@media (min-width: 769px) {
-
-    /* Force parent color */
-    .page-actions .menu-btn-group,
-    .page-actions .menu-btn-group button {
-        color: #ffffff !important;
-    }
-
-    /* Force SVG icon + <use> */
-    .page-actions .menu-btn-group button svg,
-    .page-actions .menu-btn-group button svg use {
-        fill: #ffffff !important;
-        stroke: #ffffff !important;
-        color: #ffffff !important;
-    }
+/* 🔥 OVERRIDE existing menu-btn-group color (DESKTOP FIX) */
+body .page-actions .menu-btn-group {
+    color: #ffffff !important;
 }
+
+/* Ensure SVG follows the parent color */
+body .page-actions .menu-btn-group svg,
+body .page-actions .menu-btn-group svg use {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+}
+
 
 
 
