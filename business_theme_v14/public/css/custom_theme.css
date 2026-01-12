@@ -1,3 +1,24 @@
+
+.layout-side-section,
+.list-sidebar,
+.list-sidebar.overlay-sidebar,
+.desk-sidebar {
+    color: #ffffff !important;
+}
+
+
+
+.layout-side-section *,
+.list-sidebar *,
+.list-sidebar.overlay-sidebar *,
+.desk-sidebar * {
+    color: #ffffff !important;
+}
+
+
+
+
+
 /* icon white sm cn color */
 
 .page-actions .btn-primary{
