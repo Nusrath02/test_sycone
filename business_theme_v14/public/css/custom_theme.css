@@ -2013,6 +2013,264 @@ use.like-icon {
     font-size: 16px !important;
     margin-right: 4px !important;
 }
+/* additional icons */
+/* ==================== FIXED DYNAMIC ICON SYSTEM ==================== */
+
+/* REMOVE all conflicting rules first */
+.layout-main-section h1::before,
+.page-title::before {
+    content: "" !important;
+}
+
+/* Base icon styling - DEFAULT for all pages */
+.page-title::before,
+div.page-title::before,
+.col-md-4.page-title::before,
+.col-sm-6.page-title::before,
+.col-xs-7.page-title::before {
+    font-size: 28px !important;
+    margin-right: 12px !important;
+    content: "📊" !important; /* Dashboard default */
+    display: inline-block !important;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+    vertical-align: middle !important;
+/*     filter: sepia(100%) saturate(150%) hue-rotate(25deg) brightness(0.8) !important; */
+}
+
+/* Home page ONLY - more specific selectors */
+body[data-route*="home"] .page-title::before,
+body[data-route*="Home"] .page-title::before,
+body[data-pathname*="/app/home"] .page-title::before,
+body[data-pathname="/app"] .page-title::before,
+[data-page-route*="home"] .page-title::before,
+.page-title:contains("Home")::before {
+    content: "🏠" !important;
+}
+
+/* Dashboard pages (if different from Home) */
+body[data-route*="dashboard"] .page-title::before,
+body[data-route*="Dashboard"] .page-title::before,
+[data-page-route*="dashboard"] .page-title::before {
+    content: "📊" !important;
+}
+
+/* Stock Module - Multiple targeting approaches for maximum compatibility */
+body[data-route*="stock"] .page-title::before,
+body[data-pathname*="/app/stock"] .page-title::before,
+body[data-route*="Stock"] .page-title::before,
+[data-page-route*="stock"] .page-title::before,
+[data-doctype*="Stock"] .page-title::before,
+.page-title:contains("Stock")::before {
+    content: "📦" !important;
+}
+
+/* HR Module */
+body[data-route*="hr"] .page-title::before,
+body[data-pathname*="/app/hr"] .page-title::before,
+body[data-route*="HR"] .page-title::before,
+[data-page-route*="hr"] .page-title::before {
+    content: "👥" !important;
+}
+
+/* Accounting */
+body[data-route*="accounting"] .page-title::before,
+body[data-pathname*="/app/accounting"] .page-title::before,
+body[data-route*="Accounting"] .page-title::before,
+[data-page-route*="accounting"] .page-title::before {
+    content: "💰" !important;
+}
+
+/* Buying */
+body[data-route*="buying"] .page-title::before,
+body[data-pathname*="/app/buying"] .page-title::before,
+body[data-route*="Buying"] .page-title::before,
+[data-page-route*="buying"] .page-title::before {
+    content: "🛒" !important;
+}
+
+/* Selling */
+body[data-route*="selling"] .page-title::before,
+body[data-pathname*="/app/selling"] .page-title::before,
+body[data-route*="Selling"] .page-title::before,
+[data-page-route*="selling"] .page-title::before {
+    content: "🏪" !important;
+}
+
+/* Manufacturing */
+body[data-route*="manufacturing"] .page-title::before,
+body[data-pathname*="/app/manufacturing"] .page-title::before,
+body[data-route*="Manufacturing"] .page-title::before,
+[data-page-route*="manufacturing"] .page-title::before {
+    content: "🏭" !important;
+}
+
+/* Projects */
+body[data-route*="projects"] .page-title::before,
+body[data-pathname*="/app/projects"] .page-title::before,
+body[data-route*="Projects"] .page-title::before,
+[data-page-route*="projects"] .page-title::before {
+    content: "📊" !important;
+}
+
+/* CRM */
+body[data-route*="crm"] .page-title::before,
+body[data-pathname*="/app/crm"] .page-title::before,
+body[data-route*="CRM"] .page-title::before,
+[data-page-route*="crm"] .page-title::before {
+    content: "🤝" !important;
+}
+
+/* Assets */
+body[data-route*="assets"] .page-title::before,
+body[data-pathname*="/app/assets"] .page-title::before,
+body[data-route*="Assets"] .page-title::before,
+[data-page-route*="assets"] .page-title::before {
+    content: "🏢" !important;
+}
+
+/* Quality */
+body[data-route*="quality"] .page-title::before,
+body[data-pathname*="/app/quality"] .page-title::before,
+body[data-route*="Quality"] .page-title::before,
+[data-page-route*="quality"] .page-title::before {
+    content: "✅" !important;
+}
+
+/* Support */
+body[data-route*="support"] .page-title::before,
+body[data-pathname*="/app/support"] .page-title::before,
+body[data-route*="Support"] .page-title::before,
+[data-page-route*="support"] .page-title::before {
+    content: "🎧" !important;
+}
+
+/* Users */
+body[data-route*="users"] .page-title::before,
+body[data-pathname*="/app/users"] .page-title::before,
+body[data-route*="Users"] .page-title::before,
+[data-page-route*="users"] .page-title::before {
+    content: "👤" !important;
+}
+
+/* Website */
+body[data-route*="website"] .page-title::before,
+body[data-pathname*="/app/website"] .page-title::before,
+body[data-route*="Website"] .page-title::before,
+[data-page-route*="website"] .page-title::before {
+    content: "🌐" !important;
+}
+
+/* Payroll */
+body[data-route*="payroll"] .page-title::before,
+body[data-pathname*="/app/payroll"] .page-title::before,
+body[data-route*="Payroll"] .page-title::before,
+[data-page-route*="payroll"] .page-title::before {
+    content: "💵" !important;
+}
+
+/* Tools */
+body[data-route*="tools"] .page-title::before,
+body[data-pathname*="/app/tools"] .page-title::before,
+body[data-route*="Tools"] .page-title::before,
+[data-page-route*="tools"] .page-title::before {
+    content: "🔧" !important;
+}
+
+/* Settings */
+body[data-route*="settings"] .page-title::before,
+body[data-pathname*="/app/settings"] .page-title::before,
+body[data-route*="Settings"] .page-title::before,
+[data-page-route*="settings"] .page-title::before {
+    content: "⚙️" !important;
+}
+
+/* Integrations */
+body[data-route*="integrations"] .page-title::before,
+body[data-pathname*="/app/integrations"] .page-title::before,
+body[data-route*="Integrations"] .page-title::before,
+[data-page-route*="integrations"] .page-title::before {
+    content: "🔗" !important;
+}
+
+/* Build */
+body[data-route*="build"] .page-title::before,
+body[data-pathname*="/app/build"] .page-title::before,
+body[data-route*="Build"] .page-title::before,
+[data-page-route*="build"] .page-title::before {
+    content: "🔨" !important;
+}
+
+/* ==================== JAVASCRIPT FALLBACK (Include this in a script tag) ==================== */
+/*
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function updatePageIcon() {
+        const pageTitle = document.querySelector('.page-title');
+        const currentPath = window.location.pathname.toLowerCase();
+        const currentRoute = document.body.getAttribute('data-route') || '';
+        
+        if (!pageTitle) return;
+        
+        // Remove existing icon
+        pageTitle.style.setProperty('--icon', 'none');
+        
+        let icon = '🏠'; // default
+        
+        if (currentPath.includes('/app/stock') || currentRoute.includes('stock')) {
+            icon = '📦';
+        } else if (currentPath.includes('/app/hr') || currentRoute.includes('hr')) {
+            icon = '👥';
+        } else if (currentPath.includes('/app/accounting') || currentRoute.includes('accounting')) {
+            icon = '💰';
+        } else if (currentPath.includes('/app/buying') || currentRoute.includes('buying')) {
+            icon = '🛒';
+        } else if (currentPath.includes('/app/selling') || currentRoute.includes('selling')) {
+            icon = '🏪';
+        } else if (currentPath.includes('/app/manufacturing') || currentRoute.includes('manufacturing')) {
+            icon = '🏭';
+        } else if (currentPath.includes('/app/projects') || currentRoute.includes('projects')) {
+            icon = '📊';
+        } else if (currentPath.includes('/app/crm') || currentRoute.includes('crm')) {
+            icon = '🤝';
+        } else if (currentPath.includes('/app/assets') || currentRoute.includes('assets')) {
+            icon = '🏢';
+        }
+        
+        // Apply the icon
+        pageTitle.style.setProperty('--before-content', `"${icon}"`);
+        pageTitle.style.position = 'relative';
+        pageTitle.style.paddingLeft = '40px';
+        
+        // Create or update icon element
+        let iconElement = pageTitle.querySelector('.page-icon');
+        if (!iconElement) {
+            iconElement = document.createElement('span');
+            iconElement.className = 'page-icon';
+            iconElement.style.position = 'absolute';
+            iconElement.style.left = '0';
+            iconElement.style.fontSize = '28px';
+            iconElement.style.top = '50%';
+            iconElement.style.transform = 'translateY(-50%)';
+            pageTitle.insertBefore(iconElement, pageTitle.firstChild);
+        }
+        iconElement.textContent = icon;
+    }
+    
+    // Run on page load
+    updatePageIcon();
+    
+    // Run when navigation changes (for SPAs)
+    let lastPath = window.location.pathname;
+    setInterval(() => {
+        if (window.location.pathname !== lastPath) {
+            lastPath = window.location.pathname;
+            setTimeout(updatePageIcon, 100);
+        }
+    }, 500);
+});
+</script>
+*/
+
 
 /* ==================== END OF HR ICONS ==================== */
 
