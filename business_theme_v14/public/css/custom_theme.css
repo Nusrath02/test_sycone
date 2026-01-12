@@ -1,9 +1,17 @@
 /* icon white sm cn color */
-.icon, svg, img[class*="icon"] {
+/* .icon, svg, img[class*="icon"] {
     filter: brightness(0) invert(1);
+} */
+
+svg {
+    fill: white;
+    color: white;
 }
 
-
+/* For icon fonts like Font Awesome */
+.icon, [class*="icon-"] {
+    color: white !important;
+}
 
 
 
