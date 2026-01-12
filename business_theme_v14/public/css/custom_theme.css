@@ -2539,71 +2539,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 */
-/* ==================== HR SIDEBAR MENU ICONS ==================== */
 
-/* Recruitment */
-.sidebar-menu a[href*="recruitment"]::before,
-.sidebar-menu a[href*="Recruitment"]::before,
-.dropdown-menu a[href*="recruitment"]::before,
-.dropdown-menu a[href*="Recruitment"]::before {
-    content: "🎯" !important;
-    font-size: 16px !important;
-    margin-right: 8px !important;
-}
-
-/* Performance */
-.sidebar-menu a[href*="performance"]::before,
-.sidebar-menu a[href*="Performance"]::before,
-.dropdown-menu a[href*="performance"]::before,
-.dropdown-menu a[href*="Performance"]::before {
-    content: "📈" !important;
-    font-size: 16px !important;
-    margin-right: 8px !important;
-}
-
-/* Employee Lifecycle */
-.sidebar-menu a[href*="employee-lifecycle"]::before,
-.sidebar-menu a[href*="Employee Lifecycle"]::before,
-.dropdown-menu a[href*="employee-lifecycle"]::before,
-.dropdown-menu a[href*="Employee Lifecycle"]::before {
-    content: "🔄" !important;
-    font-size: 16px !important;
-    margin-right: 8px !important;
-}
-
-/* Shift & Attendance */
-.sidebar-menu a[href*="shift"]::before,
-.sidebar-menu a[href*="Shift"]::before,
-.sidebar-menu a[href*="attendance"]::before,
-.sidebar-menu a[href*="Attendance"]::before,
-.dropdown-menu a[href*="shift"]::before,
-.dropdown-menu a[href*="Shift"]::before,
-.dropdown-menu a[href*="attendance"]::before,
-.dropdown-menu a[href*="Attendance"]::before {
-    content: "🕐" !important;
-    font-size: 16px !important;
-    margin-right: 8px !important;
-}
-
-/* Expense Claims */
-.sidebar-menu a[href*="expense"]::before,
-.sidebar-menu a[href*="Expense"]::before,
-.dropdown-menu a[href*="expense"]::before,
-.dropdown-menu a[href*="Expense"]::before {
-    content: "💳" !important;
-    font-size: 16px !important;
-    margin-right: 8px !important;
-}
-
-/* Leaves */
-.sidebar-menu a[href*="leave"]::before,
-.sidebar-menu a[href*="Leave"]::before,
-.dropdown-menu a[href*="leave"]::before,
-.dropdown-menu a[href*="Leave"]::before {
-    content: "🏖️" !important;
-    font-size: 16px !important;
-    margin-right: 8px !important;
-}
 
 /* ==================== END OF HR ICONS ==================== */
 
