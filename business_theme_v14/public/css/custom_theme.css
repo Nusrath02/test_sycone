@@ -2127,39 +2127,6 @@ header .form-control:focus {
 /* ==================== MAIN CONTENT AREA ==================== */
 /* Dashboard overview and widgets */
 
-
-
-
-
-
-/* Main content container */
-.layout-main-section {
-    background: #d5bf83 !important;
-    padding: 30px !important;
-    margin-left: 0 !important;
-}
-
-/* Page header */
-.page-head,
-.page-head .page-head-content {
-    background: transparent !important;
-    border-bottom: none !important;
-    padding-bottom: 20px !important;
-}
-
-/* Dashboard title styling */
-.layout-main-section h1,
-.layout-main-section .page-title,
-.head-title {
-    color: #1f2937 !important;
-    font-size: 28px !important;
-    font-weight: 700 !important;
-    margin-bottom: 10px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-}
-
 /* Dashboard icon */
 /* .layout-main-section h1::before,
 .page-title::before {
