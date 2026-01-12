@@ -1,3 +1,11 @@
+/* 🔥 Remove breadcrumb arrow / small icon */
+#navbar-breadcrumbs > li > a::before {
+    content: none !important;
+    display: none !important;
+}
+
+
+
 .user-profile-sidebar .profile-details .user-stats-item .stat-value{
     color:white !important;
 }
