@@ -2018,3 +2018,15 @@ ul[id^="awesomplete_list"] {
     list-style: none !important;
 }
 /* dropdown size */
+
+/* side image size alignmnet */
+.form-sidebar .sidebar-image-section .sidebar-standard-image .standard-image {
+    height: 0;
+    padding: 50% 0;
+}
+
+.form-sidebar .sidebar-image-section .standard-image {
+    font-size: 52px;
+    border-radius: var(--border-radius-lg);
+}
+/* side image size alignmnet  end */
