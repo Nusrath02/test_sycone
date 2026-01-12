@@ -1,14 +1,7 @@
 
-.layout-side-section,
-.list-sidebar,
-.list-sidebar.overlay-sidebar,
-.desk-sidebar {
+.page-content div.col.lg-2.layout-side-section,
+.page-content div.col.lg-2.layout-side-section * {
     color: #ffffff !important;
-}
-
-.energy-points,
-.energy-points * {
-    color: white !important;
 }
 
 
