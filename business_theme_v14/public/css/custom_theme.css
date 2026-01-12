@@ -595,6 +595,26 @@ use.like-icon {
 }
 /* breadcrums navar icons */
 
+/* Breadcrumbs styling */
+#navbar-breadcrumbs {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+}
+
+#navbar-breadcrumbs > li {
+    display: flex !important;
+    align-items: center !important;
+}
+
+#navbar-breadcrumbs > li > a {
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    text-decoration: none !important;
+}
+
 /* Add slash separator between breadcrumb items - more specific targeting */
 #navbar-breadcrumbs li:not(:last-child)::after {
     content: " / " !important;
@@ -616,7 +636,6 @@ use.like-icon {
     content: "\f105";
     color: #ffffff;
 }
-
 
 /* Dynamic icons for all ERPNext modules */
 /* Home/App */
@@ -913,7 +932,28 @@ use.like-icon {
     font-size: 16px;
     margin-right: 4px;
 }
-/* breadcrums navbar icons ends */
+
+/* Remove arrow separator for new documents */
+#navbar-breadcrumbs li a[href*="new-"]::after,
+#navbar-breadcrumbs li a[href*="New "]::after {
+    content: none;
+}
+
+/* /* Search bar styling */
+
+/* Placeholder text styling */
+header .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+    opacity: 1 !important;
+}
+
+header .form-control:focus {
+    background-color: white !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    z-index: 15 !important;
+    /* No color specified here, so it falls back to browser default (black) */
+}
 
 /* icons for the submenus */
 /* ==================== HR SUBMENU CATEGORY ICONS ==================== */
@@ -1101,6 +1141,7 @@ use.like-icon {
 }
 
 /* icons for the submenus end */
+
 
 /* Add these lines to your existing CSS file right after your current breadcrumb icons */
 
@@ -2040,7 +2081,234 @@ use.like-icon {
     font-size: 16px !important;
     margin-right: 4px !important;
 }
-/* additional icons */
+
+/* ==================== END OF HR ICONS ==================== */
+
+/* Hover highlight */
+#awesomplete_list_1 li:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #000 !important;
+}
+#awesomplete_list_1,
+#awesomplete_list_1 li,
+#awesomplete_list_1 li a,
+#awesomplete_list_1 span {
+  color: white !important; /* force black text */
+}
+
+#awesomplete_list_1 {
+  background:linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+  color: #000000 !important; /* black text */
+  border-radius: 6px;
+}
+ 
+ 
+/* Base list background */
+#awesomplete_list_1 {
+  background-color: #cce5ff !important; /* light blue background */
+  color: #000 !important;
+  border-radius: 6px;
+}
+ 
+/* Remove always-on highlight from first item  */
+#awesomplete_list_1 li[aria-selected="true"] {
+   background-color: rgba(255, 255, 255, 0.15) !important;
+}
+ 
+/* Normal text */
+#awesomplete_list_1 li {
+  color: #000 !important;
+  background-color: transparent !important;
+}
+
+
+
+
+/* ==================== MAIN CONTENT AREA ==================== */
+/* Dashboard overview and widgets */
+
+
+
+
+
+
+/* Main content container */
+.layout-main-section {
+    background: #d5bf83 !important;
+    padding: 30px !important;
+    margin-left: 0 !important;
+}
+
+/* Page header */
+.page-head,
+.page-head .page-head-content {
+    background: transparent !important;
+    border-bottom: none !important;
+    padding-bottom: 20px !important;
+}
+
+/* Dashboard title styling */
+.layout-main-section h1,
+.layout-main-section .page-title,
+.head-title {
+    color: #1f2937 !important;
+    font-size: 28px !important;
+    font-weight: 700 !important;
+    margin-bottom: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+/* Dashboard icon */
+/* .layout-main-section h1::before,
+.page-title::before {
+    content: "📊";
+    font-size: 24px;
+} */
+
+/* Breadcrumbs styling */
+#navbar-breadcrumbs {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+}
+
+#navbar-breadcrumbs > li {
+    display: flex !important;
+    align-items: center !important;
+}
+
+#navbar-breadcrumbs > li > a {
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    text-decoration: none !important;
+}
+
+/* Add slash separator between breadcrumb items - more specific targeting */
+#navbar-breadcrumbs li:not(:last-child)::after {
+    content: " / " !important;
+    color: white !important;
+    margin: 0 4px !important;
+    font-weight: normal !important;
+    display: inline !important;
+    white-space: nowrap !important;
+}
+
+/* Make current page (last breadcrumb) bold */
+#navbar-breadcrumbs > li:last-child > a,
+#navbar-breadcrumbs > li:last-child {
+    font-weight: bold !important;
+    color: #cbd4e3 !important;
+}
+
+/* Dynamic icons for all ERPNext modules */
+/* Home/App */
+#navbar-breadcrumbs li a[href="/app"]::before,
+#navbar-breadcrumbs li a[href*="Home"]::before {
+    content: "🏠";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Stock Management */
+#navbar-breadcrumbs li a[href*="/app/stock"]::before,
+#navbar-breadcrumbs li a[href*="Stock"]::before {
+    content: "📦";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Accounting */
+#navbar-breadcrumbs li a[href*="/app/accounting"]::before,
+#navbar-breadcrumbs li a[href*="Accounting"]::before {
+    content: "💰";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* HR */
+#navbar-breadcrumbs li a[href*="/app/hr"]::before,
+#navbar-breadcrumbs li a[href*="HR"]::before {
+    content: "👥";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Buying */
+#navbar-breadcrumbs li a[href*="/app/buying"]::before,
+#navbar-breadcrumbs li a[href*="Buying"]::before {
+    content: "🛒";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Selling */
+#navbar-breadcrumbs li a[href*="/app/selling"]::before,
+#navbar-breadcrumbs li a[href*="Selling"]::before {
+    content: "🏪";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Manufacturing */
+#navbar-breadcrumbs li a[href*="/app/manufacturing"]::before,
+#navbar-breadcrumbs li a[href*="Manufacturing"]::before {
+    content: "🏭";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Projects */
+#navbar-breadcrumbs li a[href*="/app/projects"]::before,
+#navbar-breadcrumbs li a[href*="Projects"]::before {
+    content: "📊";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* CRM */
+#navbar-breadcrumbs li a[href*="/app/crm"]::before,
+#navbar-breadcrumbs li a[href*="CRM"]::before {
+    content: "🤝";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Assets */
+#navbar-breadcrumbs li a[href*="/app/assets"]::before,
+#navbar-breadcrumbs li a[href*="Assets"]::before {
+    content: "🏢";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Quality */
+#navbar-breadcrumbs li a[href*="/app/quality"]::before,
+#navbar-breadcrumbs li a[href*="Quality"]::before {
+    content: "✅";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Support */
+#navbar-breadcrumbs li a[href*="/app/support"]::before,
+#navbar-breadcrumbs li a[href*="Support"]::before {
+    content: "🎧";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* Website */
+#navbar-breadcrumbs li a[href*="/app/website"]::before,
+#navbar-breadcrumbs li a[href*="Website"]::before {
+    content: "🌐";
+    font-size: 16px;
+    margin-right: 4px;
+}
+
 /* ==================== FIXED DYNAMIC ICON SYSTEM ==================== */
 
 /* REMOVE all conflicting rules first */
