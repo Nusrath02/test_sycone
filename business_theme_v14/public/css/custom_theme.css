@@ -4,6 +4,21 @@
 .user-profile-sidebar .profile-details .user-stats-item .stat-label{
     color:white !important;
 }
+a.edit-profile-link{
+    color:white !important;
+}
+a.user-settings-link{
+    color:white !important;
+}
+a.leaderboard-link{
+    color:white !important;
+}
+.user-stats-detail h5 {
+  color: white;
+}
+.detail-item.user-stats-detail h5 {
+  color: white;
+}
 
 
 /* profile box alignment */
