@@ -1,6 +1,8 @@
-.element.style{
-    color:white !important;
+/* Make text white only inside sidebar-section */
+.sidebar-section {
+    color: #ffffff !important;
 }
+
 
 
 
