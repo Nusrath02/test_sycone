@@ -1,8 +1,11 @@
 /* Make text white only inside sidebar-section */
-/* 🔥 Force WHITE text inside sidebar-section */
-.sidebar-section * {
+/* ✅ Only Filter text inside sidebar-section */
+.sidebar-section .filter-label,
+.sidebar-section .control-label,
+.sidebar-section .ellipsis {
     color: #ffffff !important;
 }
+
 
 
 
