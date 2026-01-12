@@ -1,18 +1,16 @@
 
 .layout-side-section,
 .list-sidebar,
-.list-sidebar.overlay-sidebar,
+/* .list-sidebar.overlay-sidebar, */
 .desk-sidebar {
     color: #ffffff !important;
 }
 
 
+profile box alignment
 
-.layout-side-section *,
-.list-sidebar *,
-.list-sidebar.overlay-sidebar *,
-.desk-sidebar * {
-    color: #ffffff !important;
+.sidebar-image-section .sidebar-standard-image{
+    margin-top:10px;
 }
 
 
