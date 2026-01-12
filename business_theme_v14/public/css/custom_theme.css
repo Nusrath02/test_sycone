@@ -1,7 +1,9 @@
 /* Make text white only inside sidebar-section */
-.sidebar-section {
+/* 🔥 Force WHITE text inside sidebar-section */
+.sidebar-section * {
     color: #ffffff !important;
 }
+
 
 
 
