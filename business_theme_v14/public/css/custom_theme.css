@@ -1,14 +1,17 @@
 /* icon white sm cn color */
-/* Make ONLY the small icon inside the menu button white */
-.menu-btn-group .icon-btn svg,
-.menu-btn-group .icon-btn svg * {
-    color: #ffffff !important;
+/*  FORCE small menu icon to WHITE (Frappe SVG <use> fix) */
+.menu-btn-group button svg,
+.menu-btn-group button svg use {
     fill: #ffffff !important;
     stroke: #ffffff !important;
-}
-.menu-btn-group .icon-btn {
     color: #ffffff !important;
 }
+
+/* Backup: force parent color */
+.menu-btn-group button {
+    color: #ffffff !important;
+}
+
 
 
 
