@@ -1,6 +1,10 @@
 
-.page-content div.col.lg-2.layout-side-section,
-.page-content div.col.lg-2.layout-side-section * {
+div.col.lg-2.layout-side-section,
+div.col.lg-2.layout-side-section * {
+    color: #ffffff !important;
+}
+[data-page-route="user-profile"] div.col.lg-2.layout-side-section,
+[data-page-route="user-profile"] div.col.lg-2.layout-side-section * {
     color: #ffffff !important;
 }
 
