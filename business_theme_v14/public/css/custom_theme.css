@@ -2592,7 +2592,7 @@ ul[id^="awesomplete_list"] {
 
 /* primary btn color */
 .btn.btn-primary, div#driver-popover-item .driver-popover-footer button.btn-primary, div#driver-popover-item .driver-popover-footer button.driver-next-btn {
-    background-color: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
     color: var(--neutral);
     white-space: nowrap;
     --icon-stroke: currentColor;
