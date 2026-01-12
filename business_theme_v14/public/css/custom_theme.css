@@ -1,16 +1,23 @@
 /* icon white sm cn color */
-/*  FORCE small menu icon to WHITE (Frappe SVG <use> fix) */
-.menu-btn-group button svg,
-.menu-btn-group button svg use {
-    fill: #ffffff !important;
-    stroke: #ffffff !important;
-    color: #ffffff !important;
+/* 🔥 DESKTOP ONLY – Force menu icon to WHITE */
+@media (min-width: 769px) {
+
+    /* Force parent color */
+    .page-actions .menu-btn-group,
+    .page-actions .menu-btn-group button {
+        color: #ffffff !important;
+    }
+
+    /* Force SVG icon + <use> */
+    .page-actions .menu-btn-group button svg,
+    .page-actions .menu-btn-group button svg use {
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+        color: #ffffff !important;
+    }
 }
 
-/* Backup: force parent color */
-.menu-btn-group button {
-    color: #ffffff !important;
-}
+
 
 
 
