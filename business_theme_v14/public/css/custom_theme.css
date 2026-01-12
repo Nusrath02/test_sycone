@@ -1,13 +1,9 @@
 /* icon white sm cn color */
-/* .icon, svg, img[class*="icon"] {
+.icon, svg, img[class*="icon"] {
     filter: brightness(0) invert(1);
-} */
-
-
-svg {
-    fill: white !important;
-    stroke: white !important;
 }
+
+
 
 
 
