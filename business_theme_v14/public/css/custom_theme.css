@@ -592,6 +592,30 @@ use.like-icon {
     stroke: #ffffff;
 }
 /* breadcrums navar icons */
+
+/* Add slash separator between breadcrumb items - more specific targeting */
+#navbar-breadcrumbs li:not(:last-child)::after {
+    content: " / " !important;
+    color: #fcfdff !important;
+    margin: 0 4px !important;
+    font-weight: normal !important;
+    display: inline !important;
+    white-space: nowrap !important;
+}
+
+/* Make current page (last breadcrumb) bold */
+/* #navbar-breadcrumbs > li:last-child > a,
+#navbar-breadcrumbs > li:last-child {
+    font-weight: bold !important;
+    color: #d4dff2 !important;
+} */
+
+#navbar-breadcrumbs > li > a::before {
+    content: "\f105";
+    color: #ffffff;
+}
+
+
 /* Dynamic icons for all ERPNext modules */
 /* Home/App */
 #navbar-breadcrumbs li a[href="/app"]::before,
