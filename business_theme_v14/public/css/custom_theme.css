@@ -1,9 +1,14 @@
 
 .layout-side-section,
-/* .list-sidebar, */
+.list-sidebar,
 .list-sidebar.overlay-sidebar,
 .desk-sidebar {
     color: #ffffff !important;
+}
+
+.energy-points,
+.energy-points * {
+    color: white !important;
 }
 
 
