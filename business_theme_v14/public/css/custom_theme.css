@@ -2615,3 +2615,15 @@ ul[id^="awesomplete_list"] {
     --icon-fill-bg: var(--btn-primary);
 }
 /* primary btn color */
+
+/* text color of the tab white */
+.level-item {
+    font-weight: var(--weight-medium);
+    color: #ffffff;
+    align-items: center;
+    display: flex;
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+}
