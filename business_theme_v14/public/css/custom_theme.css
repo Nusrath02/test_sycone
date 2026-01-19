@@ -1,16 +1,7 @@
-
 /* Make text white only inside sidebar-section */
-/* ✅ Only Filter text inside sidebar-section */
-.sidebar-section .filter-label,
-.sidebar-section .control-label,
-.sidebar-section .ellipsis {
+.sidebar-section {
     color: #ffffff !important;
 }
-
-
-
-
-
 
 
 
@@ -324,7 +315,7 @@ a.list-tag-preview{
 /* Create custom footer container - sticks to bottom */
 .sycone-custom-footer {
     position: relative !important;  /* Changed from relative to fixed */
-    bottom: 0;
+    bottom: -195px;
     left: 0;
     right: 0;
     width: 100%;
@@ -662,7 +653,7 @@ use.like-icon {
 
 #navbar-breadcrumbs > li > a::before {
     content: "\f105";
-    color: #ffffff;
+    color: rgb(5, 42, 103) !important;
 }
 
 /* Dynamic icons for all ERPNext modules */
@@ -2605,17 +2596,10 @@ ul[id^="awesomplete_list"] {
 }
 /* side image size alignmnet  end */
 
-
-/* primary btn color */
-.btn.btn-primary, div#driver-popover-item .driver-popover-footer button.btn-primary, div#driver-popover-item .driver-popover-footer button.driver-next-btn {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%) !important;
-    color: var(--neutral);
-    white-space: nowrap;
-    --icon-stroke: currentColor;
-    --icon-fill-bg: var(--btn-primary);
+/* ORG chart text color */
+.text-body, .text-muted, .node-title.text-muted.ellipsis, .small.text-muted, div#driver-popover-item .driver-popover-footer button.driver-close-btn {
+    color: #21417b  !important;
 }
-/* primary btn color */
-
 /* text color of the tab white */
 .level-item {
     font-weight: var(--weight-medium);
