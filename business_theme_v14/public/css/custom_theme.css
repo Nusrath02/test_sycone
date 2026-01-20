@@ -2611,3 +2611,8 @@ ul[id^="awesomplete_list"] {
     flex-shrink: 0;
     justify-content: center;
 }
+
+/* text color white -- Click here to post bugs and suggestions */
+.small.text-muted{
+color: #ffffff !important;
+}
