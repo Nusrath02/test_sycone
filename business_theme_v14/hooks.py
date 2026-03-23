@@ -28,6 +28,17 @@ app_include_js = [
     "/assets/business_theme_v14/js/sycone_footer.js",
 ]
 
+# Add this — registers the JS for the org chart page
+page_js = {
+    "organizational-chart": "public/js/org_chart.js"
+}
+
+# Add this — whitelists your API
+override_whitelisted_methods = {
+    "hrms.hr.page.organizational_chart.organizational_chart.get_children": 
+        "business_theme_v14.api.org_chart.get_org_chart_data"
+}
+
 # Favicon
 # Website settings
 website_context = {
