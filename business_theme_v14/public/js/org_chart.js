@@ -186,7 +186,7 @@ function doLoad(page) {
 	$("#itc-page").html('<div class="itc-empty">' + __("Loading...") + '</div>');
 
 	frappe.call({
-		method: "itchamps_custom_org_layout.api.org_chart.get_org_chart_data",
+		method: "business_theme_v14.get_org_chart_data",
 		args: { company: co, department: dp, branch: br },
 		callback: function (r) {
 			if (!r.message) return;
