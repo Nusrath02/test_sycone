@@ -28,18 +28,6 @@ app_include_js = [
     "/assets/business_theme_v14/js/sycone_footer.js",
 ]
 
-# Add this — registers the JS for the org chart page
-page_js = {
-    "organizational-chart": "public/js/org_chart.js"
-}
-
-override_whitelisted_methods = {
-    "hrms.hr.page.organizational_chart.organizational_chart.get_children":
-        "business_theme_v14.get_org_chart_data"
-}
-
-# Updated: force redeploy to pick up org_chart module
-
 # Favicon
 # Website settings
 website_context = {
