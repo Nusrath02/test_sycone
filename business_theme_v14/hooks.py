@@ -34,8 +34,8 @@ page_js = {
 }
 
 override_whitelisted_methods = {
-    "hrms.hr.page.organizational_chart.organizational_chart.get_children": 
-        "business_theme_v14.org_chart.get_org_chart_data"
+    "hrms.hr.page.organizational_chart.organizational_chart.get_children":
+        "business_theme_v14.get_org_chart_data"
 }
 
 # Updated: force redeploy to pick up org_chart module
