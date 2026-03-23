@@ -38,6 +38,8 @@ override_whitelisted_methods = {
         "business_theme_v14.org_chart.get_org_chart_data"
 }
 
+# Updated: force redeploy to pick up org_chart module
+
 # Favicon
 # Website settings
 website_context = {
