@@ -29,7 +29,7 @@ app_include_js = [
 ]
 
 page_js = {
-    "organizational-chart": "public/js/custom_org_chart.js"
+    "organizational-chart": "public/js/sycone_org_chart_v2.js"
 }
 
 # Favicon
