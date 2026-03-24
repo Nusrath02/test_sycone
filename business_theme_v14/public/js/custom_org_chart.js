@@ -230,6 +230,24 @@ function applyFilters() {
 	var count = filtered.length;
 	$("#itc-count").text(count + " " + (count === 1 ? __("employee") : __("employees")));
 
+	// Bubble up managers so the hierarchy chain is preserved when filtering
+	if (dept || branch) {
+		var byId = {};
+		for (var k = 0; k < _allEmps.length; k++) byId[_allEmps[k].id] = _allEmps[k];
+		var seen = {};
+		for (var k = 0; k < filtered.length; k++) seen[filtered[k].id] = true;
+		var extras = [];
+		for (var k = 0; k < filtered.length; k++) {
+			var mgr = filtered[k].reports_to;
+			while (mgr && byId[mgr] && !seen[mgr]) {
+				seen[mgr] = true;
+				extras.push(byId[mgr]);
+				mgr = byId[mgr].reports_to;
+			}
+		}
+		if (extras.length) filtered = filtered.concat(extras);
+	}
+
 	doRender(filtered);
 }
 
