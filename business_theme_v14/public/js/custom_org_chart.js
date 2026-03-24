@@ -57,6 +57,10 @@ if (!document.getElementById("itc-styles")) {
 [data-theme=dark] .itc-name { color:#e2e8f0; }
 [data-theme=dark] .itc-select { background-color:#1a1a2e; color:#e2e8f0; border-color:#2d2d44; }
 [data-theme=dark] .itc-tb { background:rgba(255,255,255,.08); }
+.itc-connector {
+	position:absolute; top:50%; height:1px; width:14px;
+	background:#d1d5db; pointer-events:none;
+}
 `;
 	document.head.appendChild(s);
 }
@@ -79,7 +83,6 @@ function abr(n) {
 // ────────────────────────────
 // OVERRIDE: Replace HRMS page
 // ────────────────────────────
-var _orig_on_page_load = frappe.pages["organizational-chart"].on_page_load;
 frappe.pages["organizational-chart"].on_page_load = function (wrapper) {
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
@@ -237,20 +240,53 @@ function applyFilters() {
 	var dept = $("#itc-dept-sel").val() || "";
 	var branch = $("#itc-branch-sel").val() || "";
 
-	var filtered = _allEmps.filter(function (e) {
+	// Build a quick lookup map
+	var empById = {};
+	_allEmps.forEach(function (e) { empById[e.id] = e; });
+
+	var matched = _allEmps.filter(function (e) {
 		return (!dept || e.department === dept) && (!branch || e.branch === branch);
 	});
 
-	var count = filtered.length;
+	var count = matched.length;
 	$("#itc-count").text(count + " " + (count === 1 ? __("employee") : __("employees")));
 
-	if (!filtered.length) {
+	if (!matched.length) {
 		$("#itc-list").html('<div class="itc-empty">' + __("No employees found") + '</div>');
 		return;
 	}
 
-	var html = '';
-	for (var i = 0; i < filtered.length; i++) html += cardH(filtered[i]);
+	// When a filter is active, also pull in managers up the chain so the tree makes sense
+	var visibleIds = {};
+	matched.forEach(function (e) { visibleIds[e.id] = true; });
+
+	if (dept || branch) {
+		matched.forEach(function (e) {
+			var mgr = e.reports_to;
+			while (mgr && empById[mgr] && !visibleIds[mgr]) {
+				visibleIds[mgr] = true;
+				mgr = empById[mgr].reports_to || "";
+			}
+		});
+	}
+
+	var visible = _allEmps.filter(function (e) { return visibleIds[e.id]; });
+
+	// Build parent → children map and find roots
+	var childMap = {};
+	visible.forEach(function (e) {
+		if (e.reports_to && visibleIds[e.reports_to]) {
+			if (!childMap[e.reports_to]) childMap[e.reports_to] = [];
+			childMap[e.reports_to].push(e);
+		}
+	});
+	var roots = visible.filter(function (e) {
+		return !e.reports_to || !visibleIds[e.reports_to];
+	});
+	roots.sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+	// Render tree recursively
+	var html = renderTree(roots, childMap, 0);
 	$("#itc-list").html(html);
 
 	$("#itc-list").off("click", ".itc-card").on("click", ".itc-card", function () {
@@ -260,9 +296,25 @@ function applyFilters() {
 }
 
 // ────────────────────────────
+// TREE RENDERING
+// ────────────────────────────
+function renderTree(nodes, childMap, depth) {
+	var html = '';
+	nodes.forEach(function (e) {
+		html += cardH(e, depth);
+		if (childMap[e.id] && childMap[e.id].length) {
+			var kids = childMap[e.id].slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
+			html += renderTree(kids, childMap, depth + 1);
+		}
+	});
+	return html;
+}
+
+// ────────────────────────────
 // CARD HTML
 // ────────────────────────────
-function cardH(d) {
+function cardH(d, depth) {
+	depth = depth || 0;
 	var col = dcol(d.department);
 	var av;
 	if (d.image) {
@@ -275,7 +327,13 @@ function cardH(d) {
 	if (d.branch) tags += '<span class="itc-tag itc-tb">' + esc(d.branch) + '</span>';
 	tags += '</div>';
 
-	var h = '<div class="itc-card" data-id="' + d.id + '">';
+	var indent = depth * 28;
+	var connector = depth > 0
+		? '<div class="itc-connector" style="left:' + (indent - 14) + 'px"></div>'
+		: '';
+
+	var h = '<div class="itc-card" data-id="' + d.id + '" style="margin-left:' + indent + 'px">';
+	h += connector;
 	h += '<div class="itc-bar" style="background:' + col + '"></div>';
 	h += av;
 	h += '<div class="itc-info"><div class="itc-name">' + esc(d.name) + '</div>';
