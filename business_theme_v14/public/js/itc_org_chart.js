@@ -52,15 +52,25 @@ if (!document.getElementById("itc-styles")) {
 .itc-tag { font-size:10px; font-weight:600; padding:2px 8px; border-radius:4px; white-space:nowrap; }
 .itc-td { color:#fff; }
 .itc-tb { background:#f1f3f5; color:#718096; border:1px solid #e2e8f0; }
+.itc-badge {
+	font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px;
+	background:#EEF2FF; color:#4C6EF5; white-space:nowrap; flex-shrink:0;
+}
+.itc-tog {
+	width:24px; height:24px; border-radius:50%; border:1px solid #d1d5db;
+	background:#f8fafc; color:#374151; font-size:14px; line-height:1;
+	cursor:pointer; flex-shrink:0; display:flex; align-items:center;
+	justify-content:center; font-weight:700; margin-left:4px;
+}
+.itc-tog:hover { background:#4C6EF5; color:#fff; border-color:#4C6EF5; }
+.itc-children { padding-left: 32px; border-left: 2px solid #e2e8f0; margin-left: 19px; margin-bottom: 4px; }
+.itc-children.itc-hidden { display: none; }
 [data-theme=dark] .itc-card { background:#1a1a2e; border-color:#2d2d44; }
 [data-theme=dark] .itc-card:hover { box-shadow:0 3px 10px rgba(0,0,0,.3); }
 [data-theme=dark] .itc-name { color:#e2e8f0; }
 [data-theme=dark] .itc-select { background-color:#1a1a2e; color:#e2e8f0; border-color:#2d2d44; }
 [data-theme=dark] .itc-tb { background:rgba(255,255,255,.08); }
-.itc-connector {
-	position:absolute; top:50%; height:1px; width:14px;
-	background:#d1d5db; pointer-events:none;
-}
+[data-theme=dark] .itc-children { border-left-color:#2d2d44; }
 `;
 	document.head.appendChild(s);
 }
@@ -278,7 +288,6 @@ function applyFilters() {
 	var dept = $("#itc-dept-sel").val() || "";
 	var branch = $("#itc-branch-sel").val() || "";
 
-	// Build a quick lookup map
 	var empById = {};
 	_allEmps.forEach(function (e) { empById[e.id] = e; });
 
@@ -294,10 +303,9 @@ function applyFilters() {
 		return;
 	}
 
-	// When a filter is active, also pull in managers up the chain so the tree makes sense
+	// When a filter is active, also pull in managers up the chain
 	var visibleIds = {};
 	matched.forEach(function (e) { visibleIds[e.id] = true; });
-
 	if (dept || branch) {
 		matched.forEach(function (e) {
 			var mgr = e.reports_to;
@@ -310,50 +318,53 @@ function applyFilters() {
 
 	var visible = _allEmps.filter(function (e) { return visibleIds[e.id]; });
 
-	// Build parent → children map and find roots
-	var childMap = {};
-	visible.forEach(function (e) {
-		if (e.reports_to && visibleIds[e.reports_to]) {
-			if (!childMap[e.reports_to]) childMap[e.reports_to] = [];
-			childMap[e.reports_to].push(e);
+	// Build node tree: { d: employee, ch: [childNodes] }
+	var nodeMap = {};
+	var i, e;
+	for (i = 0; i < visible.length; i++) {
+		e = visible[i];
+		nodeMap[e.id] = { d: e, ch: [] };
+	}
+	var roots = [];
+	for (i = 0; i < visible.length; i++) {
+		e = visible[i];
+		if (e.reports_to && nodeMap[e.reports_to]) {
+			nodeMap[e.reports_to].ch.push(nodeMap[e.id]);
+		} else {
+			roots.push(nodeMap[e.id]);
 		}
-	});
-	var roots = visible.filter(function (e) {
-		return !e.reports_to || !visibleIds[e.reports_to];
-	});
-	roots.sort(function (a, b) { return a.name.localeCompare(b.name); });
+	}
 
-	// Render tree recursively
-	var html = renderTree(roots, childMap, 0);
+	// Sort recursively
+	function srt(node) {
+		node.ch.sort(function (a, b) { return a.d.name.localeCompare(b.d.name); });
+		for (var j = 0; j < node.ch.length; j++) srt(node.ch[j]);
+	}
+	for (i = 0; i < roots.length; i++) srt(roots[i]);
+	roots.sort(function (a, b) { return a.d.name.localeCompare(b.d.name); });
+
+	var html = '';
+	for (i = 0; i < roots.length; i++) html += nodeH(roots[i]);
 	$("#itc-list").html(html);
 
 	$("#itc-list").off("click", ".itc-card").on("click", ".itc-card", function () {
 		var id = $(this).data("id");
 		if (id) frappe.set_route("app", "employee", id);
 	});
-}
-
-// ────────────────────────────
-// TREE RENDERING
-// ────────────────────────────
-function renderTree(nodes, childMap, depth) {
-	var html = '';
-	nodes.forEach(function (e) {
-		html += cardH(e, depth);
-		if (childMap[e.id] && childMap[e.id].length) {
-			var kids = childMap[e.id].slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
-			html += renderTree(kids, childMap, depth + 1);
-		}
+	$("#itc-list").off("click", ".itc-tog").on("click", ".itc-tog", function (ev) {
+		ev.stopPropagation();
+		var $ch = $(this).closest(".itc-card").next(".itc-children");
+		var cnt = $(this).data("cnt") || 0;
+		$ch.toggleClass("itc-hidden");
+		$(this).text($ch.hasClass("itc-hidden") ? "+" + cnt : "\u2212");
 	});
-	return html;
 }
 
 // ────────────────────────────
-// CARD HTML
+// NODE HTML (nested tree)
 // ────────────────────────────
-function cardH(d, depth) {
-	depth = depth || 0;
-	var col = dcol(d.department);
+function nodeH(node) {
+	var d = node.d, col = dcol(d.department), kids = node.ch.length;
 	var av;
 	if (d.image) {
 		av = '<div class="itc-av"><img src="' + d.image + '"></div>';
@@ -365,18 +376,24 @@ function cardH(d, depth) {
 	if (d.branch) tags += '<span class="itc-tag itc-tb">' + esc(d.branch) + '</span>';
 	tags += '</div>';
 
-	var indent = depth * 28;
-	var connector = depth > 0
-		? '<div class="itc-connector" style="left:' + (indent - 14) + 'px"></div>'
-		: '';
+	var right = '';
+	if (kids > 0) {
+		right += '<span class="itc-badge">' + kids + ' report' + (kids > 1 ? 's' : '') + '</span>';
+		right += '<button class="itc-tog" data-cnt="' + kids + '">\u2212</button>';
+	}
 
-	var h = '<div class="itc-card" data-id="' + d.id + '" style="margin-left:' + indent + 'px">';
-	h += connector;
+	var h = '<div class="itc-card" data-id="' + d.id + '">';
 	h += '<div class="itc-bar" style="background:' + col + '"></div>';
 	h += av;
 	h += '<div class="itc-info"><div class="itc-name">' + esc(d.name) + '</div>';
 	h += '<div class="itc-desg">' + esc(d.designation) + '</div>' + tags + '</div>';
-	h += '</div>';
+	h += right + '</div>';
+
+	if (kids > 0) {
+		h += '<div class="itc-children">';
+		for (var j = 0; j < node.ch.length; j++) h += nodeH(node.ch[j]);
+		h += '</div>';
+	}
 	return h;
 }
 
