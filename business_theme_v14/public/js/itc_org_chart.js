@@ -100,15 +100,15 @@ try {
 } catch(e) {}
 
 // Path B — app_include_js: script runs at desk startup before the page exists,
-// so listen for route changes and set up when the user navigates here
+// so listen for route changes and set up when the user navigates here.
+// frappe.pages["organizational-chart"] IS the DOM wrapper element directly.
 $(document).on("page-change", function () {
 	try {
 		var route = frappe.get_route ? frappe.get_route() : [];
 		if (route[0] !== "organizational-chart") return;
-		var pg = frappe.pages && frappe.pages["organizational-chart"];
-		if (!pg) return;
-		var wrapper = pg.wrapper || (pg.$wrapper && pg.$wrapper[0]);
-		if (wrapper) itc_setup(wrapper);
+		var wrapper = frappe.pages && frappe.pages["organizational-chart"];
+		if (!wrapper) return;
+		itc_setup(wrapper);
 	} catch(e) {}
 });
 
