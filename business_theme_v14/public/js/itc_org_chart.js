@@ -80,6 +80,37 @@ function abr(n) {
 	return p.length >= 2 ? (p[0][0]+p[p.length-1][0]).toUpperCase() : n.substring(0,2).toUpperCase();
 }
 
+// ────────────────────────────────────────────────────────────
+// INTERCEPT frappe.call for our API
+// The cached old custom_org_chart.js (via CDN page_js) runs
+// AFTER our page-change handler and overwrites with a flat list.
+// By hooking frappe.call we guarantee our tree runs LAST,
+// after every other callback has completed.
+// ────────────────────────────────────────────────────────────
+(function () {
+	var _orig = frappe.call.bind(frappe);
+	frappe.call = function (opts) {
+		if (opts && typeof opts.method === "string" &&
+				opts.method.indexOf("get_org_chart_data") > -1) {
+			var _cb = opts.callback;
+			opts.callback = function (r) {
+				if (_cb) _cb.apply(this, arguments);
+				// Re-render as tree after any other callbacks finish
+				setTimeout(function () {
+					if (!r || !r.message || !r.message.employees) return;
+					_allEmps = r.message.employees.slice();
+					_allEmps.sort(function (a, b) { return a.name.localeCompare(b.name); });
+					if (r.message.departments || r.message.branches) {
+						populateDropdowns(r.message.departments || [], r.message.branches || []);
+					}
+					applyFilters();
+				}, 0);
+			};
+		}
+		return _orig.apply(frappe, arguments);
+	};
+})();
+
 // ────────────────────────────
 // OVERRIDE: Replace HRMS page
 // ────────────────────────────
