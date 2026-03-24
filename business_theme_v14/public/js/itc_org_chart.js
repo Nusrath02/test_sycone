@@ -1,8 +1,8 @@
 /**
  * ITChamps Custom Org Chart
- * Flat list with in-page department/branch filter dropdowns.
- * This script is loaded via page_js AFTER HRMS's own page JS.
- * It overrides the "show" event to replace HRMS's org chart entirely.
+ * Vertical indented tree with department/branch filter dropdowns.
+ * Loaded via app_include_js — active on every page, sets up only
+ * when user navigates to organizational-chart.
  */
 
 (function () {
@@ -12,24 +12,8 @@ if (!document.getElementById("itc-styles")) {
 	var s = document.createElement("style");
 	s.id = "itc-styles";
 	s.textContent = `
-.itc-page { padding: 16px 16px 40px; max-width: 1000px; margin: 0 auto; }
+.itc-page { padding: 10px 16px 40px; max-width: 1000px; margin: 0 auto; }
 .itc-empty { text-align: center; padding: 60px 20px; color: #718096; }
-.itc-filter-bar {
-	display: flex; gap: 10px; flex-wrap: wrap;
-	margin-bottom: 16px; align-items: center;
-}
-.itc-filter-bar label { font-size: 11px; font-weight: 600; color: #718096; margin-bottom: 2px; display: block; }
-.itc-filter-wrap { display: flex; flex-direction: column; }
-.itc-select {
-	height: 32px; padding: 0 28px 0 10px; border: 1px solid #d1d5db;
-	border-radius: 6px; font-size: 12px; color: #374151; background: #fff;
-	appearance: none; -webkit-appearance: none;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7280'/%3E%3C/svg%3E");
-	background-repeat: no-repeat; background-position: right 10px center;
-	cursor: pointer; min-width: 180px;
-}
-.itc-select:focus { outline: none; border-color: #4C6EF5; box-shadow: 0 0 0 2px rgba(76,110,245,.15); }
-.itc-count { font-size: 12px; color: #718096; margin-left: auto; align-self: flex-end; padding-bottom: 4px; }
 .itc-card {
 	display: flex; align-items: center; gap: 10px;
 	background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
@@ -49,28 +33,24 @@ if (!document.getElementById("itc-styles")) {
 .itc-name { font-size:13px; font-weight:600; color:#1a202c; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .itc-desg { font-size:11px; color:#718096; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .itc-tags { display:flex; gap:4px; margin-top:3px; flex-wrap:wrap; }
-.itc-tag { font-size:10px; font-weight:600; padding:2px 8px; border-radius:4px; white-space:nowrap; }
-.itc-td { color:#fff; }
-.itc-tb { background:#f1f3f5; color:#718096; border:1px solid #e2e8f0; }
-.itc-badge {
-	font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px;
-	background:#EEF2FF; color:#4C6EF5; white-space:nowrap; flex-shrink:0;
-}
+.itc-tag { font-size:9px; font-weight:600; padding:1px 6px; border-radius:3px; white-space:nowrap; }
+.itc-td { border:1px solid; }
+.itc-tb { background:#f1f3f5; color:#718096; }
+.itc-badge { font-size:10px; color:#718096; white-space:nowrap; flex-shrink:0; }
 .itc-tog {
-	width:24px; height:24px; border-radius:50%; border:1px solid #d1d5db;
-	background:#f8fafc; color:#374151; font-size:14px; line-height:1;
-	cursor:pointer; flex-shrink:0; display:flex; align-items:center;
-	justify-content:center; font-weight:700; margin-left:4px;
+	width:22px; height:22px; border-radius:50%; border:1px solid #cbd5e0;
+	background:#fff; color:#718096; font-size:12px; line-height:20px;
+	text-align:center; cursor:pointer; padding:0; flex-shrink:0;
 }
-.itc-tog:hover { background:#4C6EF5; color:#fff; border-color:#4C6EF5; }
-.itc-children { padding-left: 32px; border-left: 2px solid #e2e8f0; margin-left: 19px; margin-bottom: 4px; }
-.itc-children.itc-hidden { display: none; }
+.itc-tog:hover { background:#f7fafc; }
+.itc-children { margin-left:24px; padding-left:16px; border-left:2px solid #e2e8f0; }
+.itc-children.itc-hidden { display:none; }
 [data-theme=dark] .itc-card { background:#1a1a2e; border-color:#2d2d44; }
 [data-theme=dark] .itc-card:hover { box-shadow:0 3px 10px rgba(0,0,0,.3); }
 [data-theme=dark] .itc-name { color:#e2e8f0; }
-[data-theme=dark] .itc-select { background-color:#1a1a2e; color:#e2e8f0; border-color:#2d2d44; }
-[data-theme=dark] .itc-tb { background:rgba(255,255,255,.08); }
+[data-theme=dark] .itc-tog { background:#1a1a2e; border-color:#2d2d44; }
 [data-theme=dark] .itc-children { border-left-color:#2d2d44; }
+[data-theme=dark] .itc-tb { background:rgba(255,255,255,.08); }
 `;
 	document.head.appendChild(s);
 }
@@ -90,42 +70,10 @@ function abr(n) {
 	return p.length >= 2 ? (p[0][0]+p[p.length-1][0]).toUpperCase() : n.substring(0,2).toUpperCase();
 }
 
-// ────────────────────────────────────────────────────────────
-// INTERCEPT frappe.call for our API
-// The cached old custom_org_chart.js (via CDN page_js) runs
-// AFTER our page-change handler and overwrites with a flat list.
-// By hooking frappe.call we guarantee our tree runs LAST,
-// after every other callback has completed.
-// ────────────────────────────────────────────────────────────
-(function () {
-	var _orig = frappe.call.bind(frappe);
-	frappe.call = function (opts) {
-		if (opts && typeof opts.method === "string" &&
-				opts.method.indexOf("get_org_chart_data") > -1) {
-			var _cb = opts.callback;
-			opts.callback = function (r) {
-				if (_cb) _cb.apply(this, arguments);
-				// Re-render as tree after any other callbacks finish
-				setTimeout(function () {
-					if (!r || !r.message || !r.message.employees) return;
-					_allEmps = r.message.employees.slice();
-					_allEmps.sort(function (a, b) { return a.name.localeCompare(b.name); });
-					if (r.message.departments || r.message.branches) {
-						populateDropdowns(r.message.departments || [], r.message.branches || []);
-					}
-					applyFilters();
-				}, 0);
-			};
-		}
-		return _orig.apply(frappe, arguments);
-	};
-})();
-
 // ────────────────────────────
-// OVERRIDE: Replace HRMS page
+// PATH A — page_js timing:
+// frappe.pages already has the page when this script runs
 // ────────────────────────────
-
-// Path A — page_js: frappe.pages already has the page object when this script runs
 try {
 	frappe.pages["organizational-chart"].on_page_load = function (wrapper) {
 		var page = frappe.ui.make_app_page({
@@ -140,9 +88,11 @@ try {
 	};
 } catch(e) {}
 
-// Path B — app_include_js: script runs at desk startup before the page exists,
-// so listen for route changes and set up when the user navigates here.
-// frappe.pages["organizational-chart"] IS the DOM wrapper element directly.
+// ────────────────────────────
+// PATH B — app_include_js timing:
+// Script loads at desk startup before page exists;
+// listen for route change and set up when user navigates here.
+// ────────────────────────────
 $(document).on("page-change", function () {
 	try {
 		var route = frappe.get_route ? frappe.get_route() : [];
@@ -159,66 +109,50 @@ $(document).on("page-change", function () {
 function itc_setup(wrapper) {
 	var page = wrapper.itc_page;
 	if (!page) {
-		page = wrapper.page || null;
-		if (!page) {
-			$(wrapper).find(".page-body").html('');
-			page = frappe.ui.make_app_page({
-				parent: wrapper,
-				title: __("Organizational Chart"),
-				single_column: true,
-			});
-			wrapper.itc_page = page;
-		}
+		$(wrapper).find(".page-body").html('');
+		page = frappe.ui.make_app_page({
+			parent: wrapper,
+			title: __("Organizational Chart"),
+			single_column: true,
+		});
+		wrapper.itc_page = page;
 	}
 
 	if (!wrapper._itc_filters_done) {
 		wrapper._itc_filters_done = true;
 
-		// Keep company in toolbar (needs Frappe Link autocomplete)
-		page._co = page.add_field({
-			fieldname: "company", label: __("Company"), fieldtype: "Link",
-			options: "Company", default: frappe.defaults.get_default("company"), reqd: 1,
-			change: function () { doLoad(page); }
-		});
-
-		// Render page shell with in-body filter bar
 		$(page.body || page.main).html(
 			'<div class="itc-page" id="itc-page">' +
-			'<div class="itc-filter-bar" id="itc-filter-bar">' +
-			'<div class="itc-filter-wrap">' +
-			'<label>' + __("Department") + '</label>' +
-			'<select class="itc-select" id="itc-dept-sel"><option value="">' + __("All Departments") + '</option></select>' +
-			'</div>' +
-			'<div class="itc-filter-wrap">' +
-			'<label>' + __("Branch") + '</label>' +
-			'<select class="itc-select" id="itc-branch-sel"><option value="">' + __("All Branches") + '</option></select>' +
-			'</div>' +
-			'<span class="itc-count" id="itc-count"></span>' +
-			'</div>' +
-			'<div id="itc-list"><div class="itc-empty">' + __("Loading...") + '</div></div>' +
+			'<div class="itc-empty">' + __("Loading...") + '</div>' +
 			'</div>'
 		);
 
-		// Filter change → client-side re-render (no extra API call)
-		$(page.body || page.main).on("change", "#itc-dept-sel, #itc-branch-sel", function () {
-			applyFilters();
+		page._co = page.add_field({
+			fieldname: "company", label: __("Company"), fieldtype: "Link",
+			options: "Company", default: frappe.defaults.get_default("company"), reqd: 1,
+			change: function () {
+				if (page._dp) page._dp.set_value(__("All Departments"));
+				if (page._br) page._br.set_value(__("All Branches"));
+				doLoad(page);
+			}
+		});
+
+		page._dp = page.add_field({
+			fieldname: "department", label: __("Department"), fieldtype: "Select",
+			options: __("All Departments"), default: __("All Departments"),
+			change: function () { doLoad(page); }
+		});
+
+		page._br = page.add_field({
+			fieldname: "branch", label: __("Branch"), fieldtype: "Select",
+			options: __("All Branches"), default: __("All Branches"),
+			change: function () { doLoad(page); }
 		});
 	} else {
 		if (!document.getElementById("itc-page")) {
 			$(page.body || page.main).html(
 				'<div class="itc-page" id="itc-page">' +
-				'<div class="itc-filter-bar" id="itc-filter-bar">' +
-				'<div class="itc-filter-wrap">' +
-				'<label>' + __("Department") + '</label>' +
-				'<select class="itc-select" id="itc-dept-sel"><option value="">' + __("All Departments") + '</option></select>' +
-				'</div>' +
-				'<div class="itc-filter-wrap">' +
-				'<label>' + __("Branch") + '</label>' +
-				'<select class="itc-select" id="itc-branch-sel"><option value="">' + __("All Branches") + '</option></select>' +
-				'</div>' +
-				'<span class="itc-count" id="itc-count"></span>' +
-				'</div>' +
-				'<div id="itc-list"><div class="itc-empty">' + __("Loading...") + '</div></div>' +
+				'<div class="itc-empty">' + __("Loading...") + '</div>' +
 				'</div>'
 			);
 		}
@@ -228,130 +162,82 @@ function itc_setup(wrapper) {
 }
 
 // ────────────────────────────
-// LOAD (API call)
+// LOAD
 // ────────────────────────────
-var _allEmps = [];
-
 function doLoad(page) {
 	var co = page._co ? page._co.get_value() : frappe.defaults.get_default("company");
 	if (!co) {
-		$("#itc-list").html('<div class="itc-empty">' + __("Select a company") + '</div>');
+		$("#itc-page").html('<div class="itc-empty">' + __("Select a company") + '</div>');
 		return;
 	}
 
+	var dp = (page._dp ? page._dp.get_value() : "") || "";
+	var br = (page._br ? page._br.get_value() : "") || "";
+	if (dp === __("All Departments")) dp = "";
+	if (br === __("All Branches")) br = "";
+
 	cm = {}; ci = 0;
-	$("#itc-list").html('<div class="itc-empty">' + __("Loading...") + '</div>');
+	$("#itc-page").html('<div class="itc-empty">' + __("Loading...") + '</div>');
 
 	frappe.call({
 		method: "business_theme_v14.api.org_chart.get_org_chart_data",
-		args: { company: co },
+		args: { company: co, department: dp, branch: br },
 		callback: function (r) {
 			if (!r.message) return;
-			_allEmps = r.message.employees || [];
-			_allEmps.sort(function (a, b) { return a.name.localeCompare(b.name); });
-
-			populateDropdowns(r.message.departments || [], r.message.branches || []);
-			applyFilters();
+			var d = r.message;
+			if (d.departments && page._dp) {
+				page._dp.df.options = [__("All Departments")].concat(d.departments).join("\n");
+				page._dp.refresh();
+			}
+			if (d.branches && page._br) {
+				page._br.df.options = [__("All Branches")].concat(d.branches).join("\n");
+				page._br.refresh();
+			}
+			doRender(d.employees);
 		},
 		error: function () {
-			$("#itc-list").html('<div class="itc-empty">' + __("Error loading data") + '</div>');
+			$("#itc-page").html('<div class="itc-empty">' + __("Error loading data") + '</div>');
 		}
 	});
 }
 
 // ────────────────────────────
-// POPULATE DROPDOWNS
+// RENDER
 // ────────────────────────────
-function populateDropdowns(depts, branches) {
-	var $dept = $("#itc-dept-sel");
-	var $branch = $("#itc-branch-sel");
-	var selDept = $dept.val();
-	var selBranch = $branch.val();
-
-	$dept.html('<option value="">' + __("All Departments") + '</option>');
-	for (var i = 0; i < depts.length; i++) {
-		$dept.append('<option value="' + esc(depts[i]) + '">' + esc(depts[i]) + '</option>');
-	}
-	$dept.val(selDept);
-
-	$branch.html('<option value="">' + __("All Branches") + '</option>');
-	for (var j = 0; j < branches.length; j++) {
-		$branch.append('<option value="' + esc(branches[j]) + '">' + esc(branches[j]) + '</option>');
-	}
-	$branch.val(selBranch);
-}
-
-// ────────────────────────────
-// APPLY FILTERS (client-side)
-// ────────────────────────────
-function applyFilters() {
-	var dept = $("#itc-dept-sel").val() || "";
-	var branch = $("#itc-branch-sel").val() || "";
-
-	var empById = {};
-	_allEmps.forEach(function (e) { empById[e.id] = e; });
-
-	var matched = _allEmps.filter(function (e) {
-		return (!dept || e.department === dept) && (!branch || e.branch === branch);
-	});
-
-	var count = matched.length;
-	$("#itc-count").text(count + " " + (count === 1 ? __("employee") : __("employees")));
-
-	if (!matched.length) {
-		$("#itc-list").html('<div class="itc-empty">' + __("No employees found") + '</div>');
+function doRender(emps) {
+	if (!emps || !emps.length) {
+		$("#itc-page").html('<div class="itc-empty">' + __("No employees found") + '</div>');
 		return;
 	}
 
-	// When a filter is active, also pull in managers up the chain
-	var visibleIds = {};
-	matched.forEach(function (e) { visibleIds[e.id] = true; });
-	if (dept || branch) {
-		matched.forEach(function (e) {
-			var mgr = e.reports_to;
-			while (mgr && empById[mgr] && !visibleIds[mgr]) {
-				visibleIds[mgr] = true;
-				mgr = empById[mgr].reports_to || "";
-			}
-		});
-	}
-
-	var visible = _allEmps.filter(function (e) { return visibleIds[e.id]; });
-
-	// Build node tree: { d: employee, ch: [childNodes] }
-	var nodeMap = {};
-	var i, e;
-	for (i = 0; i < visible.length; i++) {
-		e = visible[i];
-		nodeMap[e.id] = { d: e, ch: [] };
-	}
+	var map = {}, i, e;
+	for (i = 0; i < emps.length; i++) { e = emps[i]; map[e.id] = { d: e, ch: [] }; }
 	var roots = [];
-	for (i = 0; i < visible.length; i++) {
-		e = visible[i];
-		if (e.reports_to && nodeMap[e.reports_to]) {
-			nodeMap[e.reports_to].ch.push(nodeMap[e.id]);
+	for (i = 0; i < emps.length; i++) {
+		e = emps[i];
+		if (e.reports_to && map[e.reports_to]) {
+			map[e.reports_to].ch.push(map[e.id]);
 		} else {
-			roots.push(nodeMap[e.id]);
+			roots.push(map[e.id]);
 		}
 	}
 
-	// Sort recursively
-	function srt(node) {
-		node.ch.sort(function (a, b) { return a.d.name.localeCompare(b.d.name); });
-		for (var j = 0; j < node.ch.length; j++) srt(node.ch[j]);
+	function srt(n) {
+		n.ch.sort(function (a, b) { return a.d.name.localeCompare(b.d.name); });
+		for (var j = 0; j < n.ch.length; j++) srt(n.ch[j]);
 	}
 	for (i = 0; i < roots.length; i++) srt(roots[i]);
 	roots.sort(function (a, b) { return a.d.name.localeCompare(b.d.name); });
 
 	var html = '';
 	for (i = 0; i < roots.length; i++) html += nodeH(roots[i]);
-	$("#itc-list").html(html);
+	$("#itc-page").html(html);
 
-	$("#itc-list").off("click", ".itc-card").on("click", ".itc-card", function () {
+	$("#itc-page").off("click", ".itc-card").on("click", ".itc-card", function () {
 		var id = $(this).data("id");
 		if (id) frappe.set_route("app", "employee", id);
 	});
-	$("#itc-list").off("click", ".itc-tog").on("click", ".itc-tog", function (ev) {
+	$("#itc-page").off("click", ".itc-tog").on("click", ".itc-tog", function (ev) {
 		ev.stopPropagation();
 		var $ch = $(this).closest(".itc-card").next(".itc-children");
 		var cnt = $(this).data("cnt") || 0;
@@ -360,9 +246,6 @@ function applyFilters() {
 	});
 }
 
-// ────────────────────────────
-// NODE HTML (nested tree)
-// ────────────────────────────
 function nodeH(node) {
 	var d = node.d, col = dcol(d.department), kids = node.ch.length;
 	var av;
@@ -372,13 +255,12 @@ function nodeH(node) {
 		av = '<div class="itc-av" style="background:' + col + '">' + abr(d.name) + '</div>';
 	}
 	var tags = '<div class="itc-tags">';
-	if (d.department) tags += '<span class="itc-tag itc-td" style="background:' + col + '">' + esc(d.department) + '</span>';
+	if (d.department) tags += '<span class="itc-tag itc-td" style="color:' + col + ';border-color:' + col + '">' + esc(d.department) + '</span>';
 	if (d.branch) tags += '<span class="itc-tag itc-tb">' + esc(d.branch) + '</span>';
 	tags += '</div>';
-
 	var right = '';
 	if (kids > 0) {
-		right += '<span class="itc-badge">' + kids + ' report' + (kids > 1 ? 's' : '') + '</span>';
+		right = '<span class="itc-badge">' + kids + ' report' + (kids > 1 ? 's' : '') + '</span>';
 		right += '<button class="itc-tog" data-cnt="' + kids + '">\u2212</button>';
 	}
 
