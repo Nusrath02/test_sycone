@@ -83,27 +83,34 @@ function abr(n) {
 // ────────────────────────────
 // OVERRIDE: Replace HRMS page
 // ────────────────────────────
-frappe.pages["organizational-chart"].on_page_load = function (wrapper) {
-	var page = frappe.ui.make_app_page({
-		parent: wrapper,
-		title: __("Organizational Chart"),
-		single_column: true,
-	});
-	wrapper.itc_page = page;
 
-	$(wrapper).off("show").on("show", function () {
-		itc_setup(wrapper);
-	});
-};
+// Path A — page_js: frappe.pages already has the page object when this script runs
+try {
+	frappe.pages["organizational-chart"].on_page_load = function (wrapper) {
+		var page = frappe.ui.make_app_page({
+			parent: wrapper,
+			title: __("Organizational Chart"),
+			single_column: true,
+		});
+		wrapper.itc_page = page;
+		$(wrapper).off("show").on("show", function () {
+			itc_setup(wrapper);
+		});
+	};
+} catch(e) {}
 
-var cur_page = window.cur_page;
-if (cur_page && cur_page.page && cur_page.page.label === "organizational-chart") {
-	setTimeout(function () {
-		var wrapper = document.querySelector('[data-page-container="organizational-chart"]')
-			|| document.querySelector('.page-container[data-page="organizational-chart"]');
+// Path B — app_include_js: script runs at desk startup before the page exists,
+// so listen for route changes and set up when the user navigates here
+$(document).on("page-change", function () {
+	try {
+		var route = frappe.get_route ? frappe.get_route() : [];
+		if (route[0] !== "organizational-chart") return;
+		var pg = frappe.pages && frappe.pages["organizational-chart"];
+		if (!pg) return;
+		var wrapper = pg.wrapper || (pg.$wrapper && pg.$wrapper[0]);
 		if (wrapper) itc_setup(wrapper);
-	}, 100);
-}
+	} catch(e) {}
+});
 
 // ────────────────────────────
 // SETUP
