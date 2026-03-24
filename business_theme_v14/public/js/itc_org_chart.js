@@ -202,6 +202,10 @@ function doLoad(page) {
 			_allEmps = r.message.employees || [];
 			_allEmps.sort(function (a, b) { return a.name.localeCompare(b.name); });
 
+			console.log("ITC ORG CHART v3 — employees:", JSON.stringify(_allEmps.map(function(e){
+				return { id: e.id, name: e.name, reports_to: e.reports_to };
+			})));
+
 			populateDropdowns(r.message.departments || [], r.message.branches || []);
 			applyFilters();
 		},
