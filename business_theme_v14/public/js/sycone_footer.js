@@ -28,14 +28,7 @@ $(document).ready(function() {
     createSyconEFooter();
 });
 
-// Re-create on Frappe page changes
-if (typeof frappe !== 'undefined') {
-    frappe.ready(function() {
-        createSyconEFooter();
-    });
-    
-    // Handle SPA navigation
-    frappe.router.on('change', function() {
-        setTimeout(createSyconEFooter, 100);
-    });
-}
+// Re-create on Frappe page changes (SPA navigation)
+$(document).on("page-change", function() {
+    setTimeout(createSyconEFooter, 100);
+});
