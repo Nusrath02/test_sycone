@@ -25,9 +25,12 @@ app_include_css = [
 ]
 
 app_include_js = [
-    f"/assets/business_theme_v14/js/sycone_org_chart.js?v={app_version}",
-    f"/assets/business_theme_v14/js/sycone_footer.js?v={app_version}",
+    "/assets/business_theme_v14/js/sycone_footer.js",
 ]
+
+page_js = {
+    "organizational-chart": "public/js/custom_org_chart.js"
+}
 
 # Favicon
 # Website settings
