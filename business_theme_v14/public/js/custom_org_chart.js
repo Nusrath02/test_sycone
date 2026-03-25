@@ -5,6 +5,8 @@
 var PAL = ["#4C6EF5","#E8590C","#0CA678","#E64980","#7950F2","#1098AD","#D6336C","#5C940D","#1C7ED6","#AE3EC9","#2B8A3E","#F59F00","#C92A2A","#087F5B","#845EF7"];
 
 var _allEmps = [];
+var _allDepts = [];
+var _allBranches = [];
 var _deptFilter = "";
 var _branchFilter = "";
 
@@ -82,9 +84,8 @@ function startWatching() {
 
 function stopWatching() {
     if (_obs) { _obs.disconnect(); _obs = null; }
-    _allEmps = [];
-    _deptFilter = "";
-    _branchFilter = "";
+    _allEmps = []; _allDepts = []; _allBranches = [];
+    _deptFilter = ""; _branchFilter = "";
     var root = document.getElementById("itc-org-root");
     if (root) root.remove();
     var hrms = document.getElementById("hierarchy-chart-wrapper");
@@ -120,8 +121,12 @@ function loadAndRender() {
         args: { company: company },
         callback: function (r) {
             if (r && r.message) {
-                _allEmps = r.message.employees || [];
-                renderAll();
+                var msg = r.message;
+                _allEmps = msg.employees || [];
+                // API now returns all departments and branches
+                _allDepts = msg.departments || [];
+                _allBranches = msg.branches || [];
+                renderAll(_allEmps);
             }
         },
         error: function () {
@@ -129,19 +134,6 @@ function loadAndRender() {
             if (el) el.innerHTML = '<div class="itc-empty">Error loading data</div>';
         }
     });
-}
-
-// Build unique dept/branch lists from _allEmps
-function getOptions() {
-    var depts = {}, branches = {};
-    _allEmps.forEach(function (e) {
-        if (e.department) depts[e.department] = 1;
-        if (e.branch) branches[e.branch] = 1;
-    });
-    return {
-        depts: Object.keys(depts).sort(),
-        branches: Object.keys(branches).sort()
-    };
 }
 
 function getFilteredEmps() {
@@ -190,7 +182,6 @@ function buildTreeHtml(emps) {
     return html;
 }
 
-// colorIdx is inherited per branch; root's children each get their own PAL slot
 function nodeH(node, depth, colorIdx) {
     var d = node.d, kids = node.ch;
     var color = palColor(colorIdx);
@@ -227,19 +218,18 @@ function nodeH(node, depth, colorIdx) {
     return h;
 }
 
-function renderAll() {
+function renderAll(emps) {
     var el = document.getElementById("itc-list");
     if (!el) return;
 
-    var opts = getOptions();
     var html = "";
 
-    // Filter bar
+    // Filter bar — use dept/branch lists returned by the API
     html += '<div class="itc-filter-bar">';
     html += '<div class="itc-filter-wrap"><label>Department</label>';
     html += '<select class="itc-select" id="itc-dept-filter">';
     html += '<option value="">All Departments</option>';
-    opts.depts.forEach(function (d) {
+    _allDepts.forEach(function (d) {
         html += '<option value="' + esc(d) + '"' + (_deptFilter === d ? ' selected' : '') + '>' + esc(d) + '</option>';
     });
     html += '</select></div>';
@@ -247,31 +237,30 @@ function renderAll() {
     html += '<div class="itc-filter-wrap"><label>Branch</label>';
     html += '<select class="itc-select" id="itc-branch-filter">';
     html += '<option value="">All Branches</option>';
-    opts.branches.forEach(function (b) {
+    _allBranches.forEach(function (b) {
         html += '<option value="' + esc(b) + '"' + (_branchFilter === b ? ' selected' : '') + '>' + esc(b) + '</option>';
     });
     html += '</select></div>';
     html += '</div>';
 
-    // Tree — built inline, no separate getElementById needed
-    html += buildTreeHtml(getFilteredEmps());
+    // Tree
+    html += buildTreeHtml(emps);
 
     el.innerHTML = html;
 
-    // Use el.querySelector so we search within el, not the whole document
     var deptSel = el.querySelector("#itc-dept-filter");
     var branchSel = el.querySelector("#itc-branch-filter");
 
     if (deptSel) {
         deptSel.addEventListener("change", function () {
             _deptFilter = this.value;
-            renderAll();
+            renderAll(getFilteredEmps());
         });
     }
     if (branchSel) {
         branchSel.addEventListener("change", function () {
             _branchFilter = this.value;
-            renderAll();
+            renderAll(getFilteredEmps());
         });
     }
 
