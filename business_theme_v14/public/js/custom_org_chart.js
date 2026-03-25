@@ -1,12 +1,13 @@
 /**
  * ITChamps Custom Org Chart
- * Visual org chart with colored boxes and connecting lines.
+ * Loaded globally via app_include_js, activated on page-change.
  */
 
 (function () {
 
-// ── Inject styles ──
-if (!document.getElementById("itc-styles")) {
+// ── Inject styles once ──
+function injectStyles() {
+	if (document.getElementById("itc-styles")) return;
 	var s = document.createElement("style");
 	s.id = "itc-styles";
 	s.textContent = `
@@ -70,19 +71,34 @@ function paletteFor(depth, sibIdx) {
 
 function esc(s) { return frappe.utils.escape_html(s || ""); }
 
-// ── Main entry — runs after bundle finishes ──
-function start() {
-	var pg = frappe.pages && frappe.pages["organizational-chart"];
-	if (!pg) { setTimeout(start, 200); return; }
-
-	pg.on_page_load = function (wrapper) {
-		pg.wrapper = wrapper;
-		claimPage(wrapper);
-	};
-
-	if (pg.wrapper) claimPage(pg.wrapper);
+// ── Check if we are on the org chart page ──
+function onOrgChartPage() {
+	return frappe.get_route_str && frappe.get_route_str() === 'organizational-chart';
 }
 
+// ── Main: hook into Frappe page-change (same as sycone_footer.js) ──
+$(document).on("page-change", function () {
+	if (!onOrgChartPage()) return;
+	setTimeout(tryClaimPage, 50); // small delay lets HRMS render first
+});
+
+// Also handle direct navigation (user loads /app/organizational-chart directly)
+$(document).ready(function () {
+	setTimeout(function () {
+		if (onOrgChartPage()) tryClaimPage();
+	}, 800);
+});
+
+function tryClaimPage() {
+	var pg = frappe.pages && frappe.pages["organizational-chart"];
+	if (!pg || !pg.wrapper) return;
+	injectStyles();
+	claimPage(pg.wrapper);
+}
+
+// ────────────────────────────────────────
+// CLAIM: wipe HRMS content, install ours
+// ────────────────────────────────────────
 function claimPage(wrapper) {
 	var page = wrapper.page;
 
@@ -95,12 +111,12 @@ function claimPage(wrapper) {
 		wrapper.page = page;
 	}
 
-	// Remove HRMS show handler, bind ours
+	// Remove HRMS show handler so it cannot re-render over us
 	$(wrapper).off('show').on('show.itc', function () {
 		refreshPage(wrapper);
 	});
 
-	// Clear HRMS filter bar
+	// Clear HRMS filter bar (Dept / Branch dropdowns)
 	$(wrapper).find('.page-form').html('');
 
 	// Add company selector once
@@ -130,6 +146,9 @@ function refreshPage(wrapper) {
 	fetchAndRender(wrapper);
 }
 
+// ────────────────────────────
+// FETCH
+// ────────────────────────────
 function fetchAndRender(wrapper) {
 	var co = wrapper._itc_co
 		? wrapper._itc_co.get_value()
@@ -155,6 +174,9 @@ function fetchAndRender(wrapper) {
 	});
 }
 
+// ────────────────────────────
+// RENDER
+// ────────────────────────────
 function doRender(emps) {
 	if (!emps || !emps.length) {
 		$("#itc-list").html('<div class="itc-empty">' + __("No employees found") + '</div>');
@@ -192,6 +214,9 @@ function doRender(emps) {
 	});
 }
 
+// ────────────────────────────
+// NODE HTML
+// ────────────────────────────
 function nodeH(node, depth, sibIdx) {
 	var d = node.d, kids = node.ch;
 	var c = paletteFor(depth, sibIdx);
@@ -215,7 +240,5 @@ function nodeH(node, depth, sibIdx) {
 	h += '</div>';
 	return h;
 }
-
-setTimeout(start, 0);
 
 })();
