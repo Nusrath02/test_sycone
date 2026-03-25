@@ -183,8 +183,15 @@ function loadAndRender() {
             if (r && r.message) {
                 var msg = r.message;
                 _allEmps = msg.employees || [];
-                _allDepts = msg.departments || [];
-                _allBranches = msg.branches || [];
+                // Fallback: compute from employees if API doesn't return lists
+                _allDepts = msg.departments && msg.departments.length ? msg.departments :
+                    _allEmps.map(function (e) { return e.department; })
+                             .filter(function (v, i, a) { return v && a.indexOf(v) === i; })
+                             .sort();
+                _allBranches = msg.branches && msg.branches.length ? msg.branches :
+                    _allEmps.map(function (e) { return e.branch; })
+                             .filter(function (v, i, a) { return v && a.indexOf(v) === i; })
+                             .sort();
                 injectFiltersNearCompany();
                 renderTree();
             }
