@@ -44,71 +44,69 @@ var ICON_CIRCLE = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" s
 function esc(s) { return frappe.utils.escape_html(s || ""); }
 
 // ────────────────────────────
-// OVERRIDE: Replace HRMS page
+// INSTALL HOOKS (safe, re-runnable)
+// Called immediately and after a tick so we always win over HRMS.
 // ────────────────────────────
-var _orig_on_page_load = frappe.pages["organizational-chart"].on_page_load;
-frappe.pages["organizational-chart"].on_page_load = function (wrapper) {
-	var page = frappe.ui.make_app_page({
-		parent: wrapper,
-		title: __("Organizational Chart"),
-		single_column: true,
-	});
-	wrapper.itc_page = page;
+function itc_install_hooks() {
+	var pg = frappe.pages && frappe.pages["organizational-chart"];
+	if (!pg) return;
 
-	$(wrapper).off("show").on("show", function () {
-		itc_setup(wrapper);
-	});
-};
+	pg.on_page_load = function (wrapper) {
+		wrapper.itc_page = frappe.ui.make_app_page({
+			parent: wrapper,
+			title: __("Organizational Chart"),
+			single_column: true,
+		});
+		$(wrapper).off("show.itc").on("show.itc", function () {
+			itc_setup(wrapper);
+		});
+	};
 
-var cur_page = window.cur_page;
-if (cur_page && cur_page.page && cur_page.page.label === "organizational-chart") {
-	setTimeout(function () {
-		var wrapper = document.querySelector('[data-page-container="organizational-chart"]')
-			|| document.querySelector('.page-container[data-page="organizational-chart"]');
+	// on_page_show fires every visit — guarantees our UI even if HRMS
+	// ran on_page_load first.
+	pg.on_page_show = function () {
+		var wrapper = this.wrapper || pg.wrapper;
 		if (wrapper) itc_setup(wrapper);
-	}, 100);
+	};
 }
+
+itc_install_hooks();
+setTimeout(itc_install_hooks, 0);   // re-run after current call stack (beats HRMS late registration)
+setTimeout(itc_install_hooks, 300); // extra safety pass
 
 // ────────────────────────────
 // SETUP
 // ────────────────────────────
 function itc_setup(wrapper) {
-	var page = wrapper.itc_page;
+	var page = wrapper.itc_page || wrapper.page || null;
+
 	if (!page) {
-		page = wrapper.page || null;
-		if (!page) {
-			$(wrapper).find(".page-body").html('');
-			page = frappe.ui.make_app_page({
-				parent: wrapper,
-				title: __("Organizational Chart"),
-				single_column: true,
-			});
-			wrapper.itc_page = page;
-		}
+		$(wrapper).find(".page-body").html('');
+		page = frappe.ui.make_app_page({
+			parent: wrapper,
+			title: __("Organizational Chart"),
+			single_column: true,
+		});
+		wrapper.itc_page = page;
 	}
 
+	// Add company selector only once per wrapper
 	if (!wrapper._itc_done) {
 		wrapper._itc_done = true;
-
 		page._co = page.add_field({
 			fieldname: "company", label: __("Company"), fieldtype: "Link",
 			options: "Company", default: frappe.defaults.get_default("company"), reqd: 1,
 			change: function () { doLoad(page); }
 		});
+	}
 
+	// Always ensure our container is present (HRMS may have replaced it)
+	if (!document.getElementById("itc-page")) {
 		$(page.body || page.main).html(
 			'<div class="itc-page" id="itc-page">' +
 			'<div id="itc-list"><div class="itc-empty">' + __("Loading...") + '</div></div>' +
 			'</div>'
 		);
-	} else {
-		if (!document.getElementById("itc-page")) {
-			$(page.body || page.main).html(
-				'<div class="itc-page" id="itc-page">' +
-				'<div id="itc-list"><div class="itc-empty">' + __("Loading...") + '</div></div>' +
-				'</div>'
-			);
-		}
 	}
 
 	doLoad(page);
