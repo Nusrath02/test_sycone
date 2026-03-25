@@ -7,8 +7,6 @@ var PAL = ["#4C6EF5","#E8590C","#0CA678","#E64980","#7950F2","#1098AD","#D6336C"
 var _allEmps = [];
 var _allDepts = [];
 var _allBranches = [];
-var _deptFilter = "";
-var _branchFilter = "";
 
 function palColor(idx) { return PAL[idx % PAL.length]; }
 
@@ -18,18 +16,28 @@ function initials(name) {
 
 function esc(s) { return frappe.utils.escape_html(s || ""); }
 
+function uniq(emps, key) {
+    var seen = {}, out = [];
+    emps.forEach(function (e) {
+        if (e[key] && !seen[e[key]]) { seen[e[key]] = 1; out.push(e[key]); }
+    });
+    return out.sort();
+}
+
 function injectStyles() {
     if (document.getElementById("itc-styles")) return;
     var s = document.createElement("style");
     s.id = "itc-styles";
     s.textContent = [
-        "#itc-org-root { padding: 10px 16px 40px; overflow-x: auto; }",
+        "#itc-org-root { padding: 16px 16px 40px; overflow-x: auto; }",
         ".itc-empty { text-align:center; padding:60px 20px; color:#718096; }",
-        ".itc-filter-wrap { display:inline-flex; flex-direction:column; margin-left:8px; vertical-align:bottom; }",
-        ".itc-filter-wrap label { font-size:11px; font-weight:600; color:#718096; margin-bottom:2px; display:block; }",
-        ".itc-select { height:32px; padding:0 28px 0 10px; border:1px solid #d1d5db; border-radius:6px; font-size:12px; color:#374151; background:#fff; appearance:none; -webkit-appearance:none;",
+        ".itc-filter-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; align-items:center; }",
+        ".itc-filter-bar label { font-size:11px; font-weight:600; color:#718096; margin-bottom:2px; display:block; }",
+        ".itc-filter-wrap { display:flex; flex-direction:column; }",
+        ".itc-select { height:32px; padding:0 28px 0 10px; border:1px solid #d1d5db; border-radius:6px;",
+        "  font-size:12px; color:#374151; background:#fff; appearance:none; -webkit-appearance:none;",
         "  background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7280'/%3E%3C/svg%3E\");",
-        "  background-repeat:no-repeat; background-position:right 10px center; cursor:pointer; min-width:160px; }",
+        "  background-repeat:no-repeat; background-position:right 10px center; cursor:pointer; min-width:180px; }",
         ".itc-select:focus { outline:none; border-color:#4C6EF5; box-shadow:0 0 0 2px rgba(76,110,245,.15); }",
         ".org-wrap { display:flex; justify-content:center; padding:10px 0 30px; }",
         ".org-node { display:inline-flex; flex-direction:column; align-items:center; }",
@@ -41,14 +49,13 @@ function injectStyles() {
         ".org-child-wrap:last-child::before  { right:50%; }",
         ".org-child-wrap:only-child::before  { display:none; }",
         ".org-child-wrap::after { content:''; position:absolute; top:0; left:50%; width:1px; height:20px; background:#ccc; }",
-        ".itc-card { display:flex; align-items:center; gap:10px; background:#fff; border:1px solid #e2e8f0; border-radius:8px;",
-        "  padding:10px 14px; cursor:pointer; position:relative; overflow:hidden;",
+        ".itc-card { display:flex; align-items:center; gap:10px; background:#fff; border:1px solid #e2e8f0;",
+        "  border-radius:8px; padding:10px 14px; cursor:pointer; position:relative; overflow:hidden;",
         "  transition:box-shadow .12s,border-color .12s; min-width:190px; max-width:240px; }",
         ".itc-card:hover { box-shadow:0 3px 10px rgba(0,0,0,.08); }",
         ".itc-bar { position:absolute; left:0; top:0; bottom:0; width:4px; }",
-        ".itc-av { width:38px; height:38px; border-radius:50%; flex-shrink:0;",
-        "  display:flex; align-items:center; justify-content:center;",
-        "  color:#fff; font-size:13px; font-weight:700; overflow:hidden; }",
+        ".itc-av { width:38px; height:38px; border-radius:50%; flex-shrink:0; display:flex; align-items:center;",
+        "  justify-content:center; color:#fff; font-size:13px; font-weight:700; overflow:hidden; }",
         ".itc-av img { width:100%; height:100%; object-fit:cover; }",
         ".itc-info { flex:1; min-width:0; }",
         ".itc-name { font-size:13px; font-weight:600; color:#1a202c; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }",
@@ -57,6 +64,10 @@ function injectStyles() {
         ".itc-tag { font-size:10px; font-weight:600; padding:2px 8px; border-radius:4px; white-space:nowrap; }",
         ".itc-td { color:#fff; }",
         ".itc-tb { background:#f1f3f5; color:#718096; border:1px solid #e2e8f0; }",
+        "[data-theme=dark] .itc-card { background:#1a1a2e; border-color:#2d2d44; }",
+        "[data-theme=dark] .itc-name { color:#e2e8f0; }",
+        "[data-theme=dark] .itc-select { background-color:#1a1a2e; color:#e2e8f0; border-color:#2d2d44; }",
+        "[data-theme=dark] .itc-tb { background:rgba(255,255,255,.08); }",
     ].join(" ");
     document.head.appendChild(s);
 }
@@ -80,12 +91,6 @@ function startWatching() {
 function stopWatching() {
     if (_obs) { _obs.disconnect(); _obs = null; }
     _allEmps = []; _allDepts = []; _allBranches = [];
-    _deptFilter = ""; _branchFilter = "";
-    // Remove injected filter wraps from HRMS bar
-    ["itc-dept-wrap", "itc-branch-wrap"].forEach(function (id) {
-        var el = document.getElementById(id);
-        if (el) el.remove();
-    });
     var root = document.getElementById("itc-org-root");
     if (root) root.remove();
     var hrms = document.getElementById("hierarchy-chart-wrapper");
@@ -100,73 +105,37 @@ function tryInject() {
     hrms.style.display = "none";
     injectStyles();
 
+    // Build the shell: filter bar (selects empty for now) + tree container
     var root = document.createElement("div");
     root.id = "itc-org-root";
-    root.innerHTML = '<div id="itc-list"><div class="itc-empty">Loading\u2026</div></div>';
+    root.innerHTML =
+        '<div class="itc-filter-bar">' +
+            '<div class="itc-filter-wrap"><label>Department</label>' +
+                '<select class="itc-select" id="itc-dept-sel"><option value="">All Departments</option></select>' +
+            '</div>' +
+            '<div class="itc-filter-wrap"><label>Branch</label>' +
+                '<select class="itc-select" id="itc-branch-sel"><option value="">All Branches</option></select>' +
+            '</div>' +
+        '</div>' +
+        '<div id="itc-list"><div class="itc-empty">Loading\u2026</div></div>';
+
     hrms.parentNode.insertBefore(root, hrms);
+
+    // Filter changes: client-side re-render, no extra API call
+    root.addEventListener("change", function (ev) {
+        if (ev.target.id === "itc-dept-sel" || ev.target.id === "itc-branch-sel") {
+            renderTree();
+        }
+    });
+
+    // Card click → open employee
+    root.addEventListener("click", function (ev) {
+        var card = ev.target.closest && ev.target.closest(".itc-card");
+        if (card && card.dataset.id) frappe.set_route("app", "employee", card.dataset.id);
+    });
 
     loadAndRender();
     return true;
-}
-
-// Find the HRMS filter bar that contains the company selector
-function getHRMSFilterContainer() {
-    var inp = document.querySelector('input[data-fieldname="company"]');
-    if (!inp) return null;
-    // Try known Frappe page filter containers first
-    var container = inp.closest('.standard-filter-section') ||
-                    inp.closest('.page-form') ||
-                    inp.closest('.filter-row');
-    if (container) return container;
-    // Fallback: walk up 4 levels from the input
-    var el = inp;
-    for (var i = 0; i < 4; i++) { el = el && el.parentNode; }
-    return el || null;
-}
-
-function injectFiltersNearCompany() {
-    if (document.getElementById("itc-dept-wrap")) return; // already injected
-
-    var container = getHRMSFilterContainer();
-    if (!container) return;
-
-    function makeWrap(id, labelText, items, currentVal, onChange) {
-        var wrap = document.createElement("div");
-        wrap.id = id + "-wrap";
-        wrap.className = "itc-filter-wrap";
-        var lbl = document.createElement("label");
-        lbl.textContent = labelText;
-        var sel = document.createElement("select");
-        sel.id = id;
-        sel.className = "itc-select";
-        var opt0 = document.createElement("option");
-        opt0.value = "";
-        opt0.textContent = "All " + labelText + "s";
-        sel.appendChild(opt0);
-        items.forEach(function (item) {
-            var opt = document.createElement("option");
-            opt.value = item;
-            opt.textContent = item;
-            if (item === currentVal) opt.selected = true;
-            sel.appendChild(opt);
-        });
-        sel.addEventListener("change", function () { onChange(this.value); });
-        wrap.appendChild(lbl);
-        wrap.appendChild(sel);
-        return wrap;
-    }
-
-    var deptWrap = makeWrap("itc-dept-filter", "Department", _allDepts, _deptFilter, function (val) {
-        _deptFilter = val;
-        renderTree();
-    });
-    var branchWrap = makeWrap("itc-branch-filter", "Branch", _allBranches, _branchFilter, function (val) {
-        _branchFilter = val;
-        renderTree();
-    });
-
-    container.appendChild(deptWrap);
-    container.appendChild(branchWrap);
 }
 
 function loadAndRender() {
@@ -183,16 +152,9 @@ function loadAndRender() {
             if (r && r.message) {
                 var msg = r.message;
                 _allEmps = msg.employees || [];
-                // Fallback: compute from employees if API doesn't return lists
-                _allDepts = msg.departments && msg.departments.length ? msg.departments :
-                    _allEmps.map(function (e) { return e.department; })
-                             .filter(function (v, i, a) { return v && a.indexOf(v) === i; })
-                             .sort();
-                _allBranches = msg.branches && msg.branches.length ? msg.branches :
-                    _allEmps.map(function (e) { return e.branch; })
-                             .filter(function (v, i, a) { return v && a.indexOf(v) === i; })
-                             .sort();
-                injectFiltersNearCompany();
+                _allDepts  = (msg.departments  && msg.departments.length)  ? msg.departments  : uniq(_allEmps, "department");
+                _allBranches = (msg.branches && msg.branches.length) ? msg.branches : uniq(_allEmps, "branch");
+                populateDropdowns();
                 renderTree();
             }
         },
@@ -203,25 +165,48 @@ function loadAndRender() {
     });
 }
 
+function populateDropdowns() {
+    var deptSel   = document.getElementById("itc-dept-sel");
+    var branchSel = document.getElementById("itc-branch-sel");
+    if (!deptSel || !branchSel) return;
+
+    // Preserve current selection
+    var selDept   = deptSel.value;
+    var selBranch = branchSel.value;
+
+    deptSel.innerHTML = '<option value="">All Departments</option>';
+    _allDepts.forEach(function (d) {
+        deptSel.innerHTML += '<option value="' + esc(d) + '">' + esc(d) + '</option>';
+    });
+    deptSel.value = selDept;
+
+    branchSel.innerHTML = '<option value="">All Branches</option>';
+    _allBranches.forEach(function (b) {
+        branchSel.innerHTML += '<option value="' + esc(b) + '">' + esc(b) + '</option>';
+    });
+    branchSel.value = selBranch;
+}
+
 function getFilteredEmps() {
-    if (!_deptFilter && !_branchFilter) return _allEmps;
+    var dept   = (document.getElementById("itc-dept-sel")   || {}).value || "";
+    var branch = (document.getElementById("itc-branch-sel") || {}).value || "";
+    if (!dept && !branch) return _allEmps;
 
     var empMap = {};
     _allEmps.forEach(function (e) { empMap[e.id] = e; });
 
     var included = {};
-    function includeWithAncestors(id) {
+    function addWithAncestors(id) {
         if (included[id]) return;
         included[id] = true;
         var e = empMap[id];
-        if (e && e.reports_to && empMap[e.reports_to]) includeWithAncestors(e.reports_to);
+        if (e && e.reports_to && empMap[e.reports_to]) addWithAncestors(e.reports_to);
     }
     _allEmps.forEach(function (e) {
-        var deptOk = !_deptFilter || e.department === _deptFilter;
-        var branchOk = !_branchFilter || e.branch === _branchFilter;
-        if (deptOk && branchOk) includeWithAncestors(e.id);
+        if ((!dept || e.department === dept) && (!branch || e.branch === branch)) {
+            addWithAncestors(e.id);
+        }
     });
-
     return _allEmps.filter(function (e) { return included[e.id]; });
 }
 
@@ -229,10 +214,6 @@ function renderTree() {
     var el = document.getElementById("itc-list");
     if (!el) return;
     el.innerHTML = buildTreeHtml(getFilteredEmps());
-    el.addEventListener("click", function (ev) {
-        var card = ev.target.closest && ev.target.closest(".itc-card");
-        if (card && card.dataset.id) frappe.set_route("app", "employee", card.dataset.id);
-    });
 }
 
 function buildTreeHtml(emps) {
