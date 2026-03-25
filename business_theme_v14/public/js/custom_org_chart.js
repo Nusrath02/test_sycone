@@ -1,11 +1,13 @@
 /**
  * ITChamps Custom Org Chart
- * Loaded globally via app_include_js, activated on page-change.
+ * Loaded globally via app_include_js.
+ * Uses Object.defineProperty to intercept HRMS page registration
+ * and override on_page_load before it is ever called.
  */
 
 (function () {
 
-// ── Inject styles once ──
+// ── Styles ──
 function injectStyles() {
 	if (document.getElementById("itc-styles")) return;
 	var s = document.createElement("style");
@@ -13,10 +15,8 @@ function injectStyles() {
 	s.textContent = `
 .itc-page { padding: 20px 16px 40px; overflow-x: auto; }
 .itc-empty { text-align: center; padding: 60px 20px; color: #718096; }
-
 .org-wrap { display: flex; justify-content: center; padding: 10px 0 30px; }
 .org-node { display: inline-flex; flex-direction: column; align-items: center; }
-
 .itc-card {
 	border-radius: 8px; padding: 12px 18px;
 	min-width: 130px; max-width: 190px;
@@ -27,9 +27,7 @@ function injectStyles() {
 .itc-card:hover { filter: brightness(.93); }
 .org-card-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
 .org-card-info { font-size: 11px; line-height: 1.4; }
-
 .org-vline { width: 1px; height: 20px; background: #ccc; flex-shrink: 0; }
-
 .org-children { display: flex; }
 .org-child-wrap {
 	display: flex; flex-direction: column; align-items: center;
@@ -53,7 +51,7 @@ function injectStyles() {
 	document.head.appendChild(s);
 }
 
-// ── Color palette ──
+// ── Colors ──
 var PALETTE = [
 	{ bg: '#ede9fc', bd: '#7c3aed', tx: '#5b21b6' },
 	{ bg: '#d1fae5', bd: '#059669', tx: '#065f46' },
@@ -62,46 +60,87 @@ var PALETTE = [
 	{ bg: '#fef3c7', bd: '#d97706', tx: '#92400e' },
 	{ bg: '#fce7f3', bd: '#db2777', tx: '#9d174d' },
 ];
-
 function paletteFor(depth, sibIdx) {
 	if (depth === 0) return PALETTE[0];
 	if (depth === 1) return PALETTE[1 + (sibIdx % (PALETTE.length - 1))];
 	return PALETTE[3];
 }
-
 function esc(s) { return frappe.utils.escape_html(s || ""); }
 
-// ── Check if we are on the org chart page ──
-function onOrgChartPage() {
-	return frappe.get_route_str && frappe.get_route_str() === 'organizational-chart';
+// ──────────────────────────────────────────────────────────────
+// INTERCEPT: watch frappe.pages for the org chart page
+// Our app_include_js runs before HRMS bundles are loaded,
+// so frappe.pages["organizational-chart"] is not set yet.
+// Object.defineProperty lets us catch the exact moment HRMS sets it.
+// ──────────────────────────────────────────────────────────────
+var _pgStore = null;
+
+function watchForPage() {
+	// Already registered (e.g. page refresh directly on org chart URL)
+	if (frappe.pages && frappe.pages["organizational-chart"]) {
+		onPageRegistered(frappe.pages["organizational-chart"]);
+		return;
+	}
+
+	try {
+		Object.defineProperty(frappe.pages, "organizational-chart", {
+			configurable: true,
+			enumerable: true,
+			get: function () { return _pgStore; },
+			set: function (val) {
+				_pgStore = val;
+				if (val) onPageRegistered(val);
+			}
+		});
+	} catch (e) {
+		// Object.defineProperty failed — fall back to polling
+		var t = setInterval(function () {
+			if (frappe.pages && frappe.pages["organizational-chart"]) {
+				clearInterval(t);
+				onPageRegistered(frappe.pages["organizational-chart"]);
+			}
+		}, 100);
+	}
 }
 
-// ── Main: hook into Frappe page-change (same as sycone_footer.js) ──
+function onPageRegistered(pg) {
+	if (pg._itc) return;
+	pg._itc = true;
+
+	// Replace on_page_load entirely — never call HRMS version.
+	// This prevents HRMS from loading hierarchy-chart.bundle and mounting Vue.
+	pg.on_page_load = function (wrapper) {
+		pg.wrapper = wrapper;
+		injectStyles();
+		setupOurPage(wrapper);
+	};
+}
+
+// ──────────────────────────────────────────────────────────────
+// BACKUP: page-change event (covers SPA navigation after first load)
+// ──────────────────────────────────────────────────────────────
 $(document).on("page-change", function () {
-	if (!onOrgChartPage()) return;
-	setTimeout(tryClaimPage, 50); // small delay lets HRMS render first
-});
-
-// Also handle direct navigation (user loads /app/organizational-chart directly)
-$(document).ready(function () {
+	if (window.location.href.indexOf("organizational-chart") === -1) return;
 	setTimeout(function () {
-		if (onOrgChartPage()) tryClaimPage();
-	}, 800);
+		var pg = frappe.pages && frappe.pages["organizational-chart"];
+		if (!pg || !pg.wrapper) return;
+		injectStyles();
+		if (!pg.wrapper._itc_claimed) setupOurPage(pg.wrapper);
+	}, 100);
 });
 
-function tryClaimPage() {
-	var pg = frappe.pages && frappe.pages["organizational-chart"];
-	if (!pg || !pg.wrapper) return;
-	injectStyles();
-	claimPage(pg.wrapper);
-}
+// ──────────────────────────────────────────────────────────────
+// SETUP
+// ──────────────────────────────────────────────────────────────
+function setupOurPage(wrapper) {
+	wrapper._itc_claimed = true;
 
-// ────────────────────────────────────────
-// CLAIM: wipe HRMS content, install ours
-// ────────────────────────────────────────
-function claimPage(wrapper) {
+	// Remove HRMS show handlers; bind ours
+	$(wrapper).off("show").on("show.itc", function () {
+		onShow(wrapper);
+	});
+
 	var page = wrapper.page;
-
 	if (!page) {
 		page = frappe.ui.make_app_page({
 			parent: wrapper,
@@ -111,13 +150,8 @@ function claimPage(wrapper) {
 		wrapper.page = page;
 	}
 
-	// Remove HRMS show handler so it cannot re-render over us
-	$(wrapper).off('show').on('show.itc', function () {
-		refreshPage(wrapper);
-	});
-
-	// Clear HRMS filter bar (Dept / Branch dropdowns)
-	$(wrapper).find('.page-form').html('');
+	// Clear any HRMS filter fields (Dept / Branch)
+	$(wrapper).find(".page-form").html("");
 
 	// Add company selector once
 	if (!wrapper._itc_co) {
@@ -135,10 +169,10 @@ function claimPage(wrapper) {
 	fetchAndRender(wrapper);
 }
 
-function refreshPage(wrapper) {
+function onShow(wrapper) {
 	var page = wrapper.page;
 	if (!page) return;
-	if (!document.getElementById('itc-list')) {
+	if (!document.getElementById("itc-list")) {
 		$(page.body || page.main).html(
 			'<div id="itc-list"><div class="itc-empty">' + __("Loading...") + '</div></div>'
 		);
@@ -146,9 +180,9 @@ function refreshPage(wrapper) {
 	fetchAndRender(wrapper);
 }
 
-// ────────────────────────────
+// ──────────────────────────────────────────────────────────────
 // FETCH
-// ────────────────────────────
+// ──────────────────────────────────────────────────────────────
 function fetchAndRender(wrapper) {
 	var co = wrapper._itc_co
 		? wrapper._itc_co.get_value()
@@ -158,7 +192,6 @@ function fetchAndRender(wrapper) {
 		$("#itc-list").html('<div class="itc-empty">' + __("Select a company") + '</div>');
 		return;
 	}
-
 	$("#itc-list").html('<div class="itc-empty">' + __("Loading...") + '</div>');
 
 	frappe.call({
@@ -174,9 +207,9 @@ function fetchAndRender(wrapper) {
 	});
 }
 
-// ────────────────────────────
+// ──────────────────────────────────────────────────────────────
 // RENDER
-// ────────────────────────────
+// ──────────────────────────────────────────────────────────────
 function doRender(emps) {
 	if (!emps || !emps.length) {
 		$("#itc-list").html('<div class="itc-empty">' + __("No employees found") + '</div>');
@@ -205,7 +238,6 @@ function doRender(emps) {
 	var html = '<div class="org-wrap">';
 	for (i = 0; i < roots.length; i++) html += nodeH(roots[i], 0, i);
 	html += '</div>';
-
 	$("#itc-list").html(html);
 
 	$("#itc-list").off("click", ".itc-card").on("click", ".itc-card", function () {
@@ -214,21 +246,16 @@ function doRender(emps) {
 	});
 }
 
-// ────────────────────────────
-// NODE HTML
-// ────────────────────────────
 function nodeH(node, depth, sibIdx) {
 	var d = node.d, kids = node.ch;
 	var c = paletteFor(depth, sibIdx);
 	var parts = [d.designation, d.department, d.branch].filter(function (v) { return !!v; });
-
 	var h = '<div class="org-node">';
 	h += '<div class="itc-card" data-id="' + esc(d.id) + '"'
 		+ ' style="background:' + c.bg + ';border-color:' + c.bd + ';color:' + c.tx + '">';
 	h += '<div class="org-card-name">' + esc(d.name) + '</div>';
-	if (parts.length) h += '<div class="org-card-info">' + esc(parts.join(' · ')) + '</div>';
+	if (parts.length) h += '<div class="org-card-info">' + esc(parts.join(" · ")) + '</div>';
 	h += '</div>';
-
 	if (kids.length > 0) {
 		h += '<div class="org-vline"></div><div class="org-children">';
 		for (var j = 0; j < kids.length; j++) {
@@ -236,9 +263,13 @@ function nodeH(node, depth, sibIdx) {
 		}
 		h += '</div>';
 	}
-
 	h += '</div>';
 	return h;
 }
+
+// ── Start: run as soon as frappe.pages is available ──
+$(document).ready(function () {
+	watchForPage();
+});
 
 })();
