@@ -38,7 +38,6 @@ if (!document.getElementById("itc-styles")) {
 	display: flex; flex-direction: column; align-items: center;
 	padding: 20px 12px 0; position: relative;
 }
-
 /* Horizontal connector spanning siblings */
 .org-child-wrap::before {
 	content: ''; position: absolute; top: 0;
@@ -47,13 +46,11 @@ if (!document.getElementById("itc-styles")) {
 .org-child-wrap:first-child::before { left: 50%; }
 .org-child-wrap:last-child::before  { right: 50%; }
 .org-child-wrap:only-child::before  { display: none; }
-
 /* Vertical drop from horizontal bar to card */
 .org-child-wrap::after {
 	content: ''; position: absolute; top: 0; left: 50%;
 	width: 1px; height: 20px; background: #ccc;
 }
-
 [data-theme=dark] .org-vline,
 [data-theme=dark] .org-child-wrap::before,
 [data-theme=dark] .org-child-wrap::after { background: #4a5568; }
@@ -61,7 +58,7 @@ if (!document.getElementById("itc-styles")) {
 	document.head.appendChild(s);
 }
 
-// ── Color palette (depth + sibling index) ──
+// ── Color palette ──
 var PALETTE = [
 	{ bg: '#ede9fc', bd: '#7c3aed', tx: '#5b21b6' }, // purple  – root
 	{ bg: '#d1fae5', bd: '#059669', tx: '#065f46' }, // green   – level 1, idx 0
@@ -79,77 +76,98 @@ function paletteFor(depth, sibIdx) {
 
 function esc(s) { return frappe.utils.escape_html(s || ""); }
 
-// ────────────────────────────
-// INSTALL HOOKS (safe, re-runnable)
-// ────────────────────────────
-function itc_install_hooks() {
+// ────────────────────────────────────────
+// MAIN ENTRY — runs after bundle finishes
+// ────────────────────────────────────────
+function start() {
 	var pg = frappe.pages && frappe.pages["organizational-chart"];
-	if (!pg) return;
+	if (!pg) {
+		// Page not registered yet — retry
+		setTimeout(start, 200);
+		return;
+	}
 
+	// Override on_page_load so future clean navigations use our version
 	pg.on_page_load = function (wrapper) {
-		wrapper.itc_page = frappe.ui.make_app_page({
-			parent: wrapper,
-			title: __("Organizational Chart"),
-			single_column: true,
-		});
-		$(wrapper).off("show.itc").on("show.itc", function () {
-			itc_setup(wrapper);
-		});
+		pg.wrapper = wrapper;
+		claimPage(wrapper);
 	};
 
-	// on_page_show fires every visit — guarantees our UI even if HRMS
-	// ran on_page_load first.
-	pg.on_page_show = function () {
-		var wrapper = this.wrapper || pg.wrapper;
-		if (wrapper) itc_setup(wrapper);
-	};
+	// If the page is already loaded (user refreshed on org chart URL),
+	// take over the existing wrapper immediately
+	if (pg.wrapper) {
+		claimPage(pg.wrapper);
+	}
 }
 
-itc_install_hooks();
-setTimeout(itc_install_hooks, 0);
-setTimeout(itc_install_hooks, 300);
-
-// ────────────────────────────
-// SETUP
-// ────────────────────────────
-function itc_setup(wrapper) {
-	var page = wrapper.itc_page || wrapper.page || null;
+// ────────────────────────────────────────
+// CLAIM: wipe HRMS content, install ours
+// ────────────────────────────────────────
+function claimPage(wrapper) {
+	// frappe.ui.make_app_page sets opts.parent.page — so wrapper.page exists
+	// after HRMS (or Frappe) called make_app_page.  We reuse that page object.
+	var page = wrapper.page;
 
 	if (!page) {
-		$(wrapper).find(".page-body").html('');
+		// Fallback: HRMS hasn't run yet (first-load path via on_page_load)
 		page = frappe.ui.make_app_page({
 			parent: wrapper,
 			title: __("Organizational Chart"),
 			single_column: true,
 		});
-		wrapper.itc_page = page;
+		wrapper.page = page;
 	}
 
-	if (!wrapper._itc_done) {
-		wrapper._itc_done = true;
-		page._co = page.add_field({
+	// ── Remove HRMS's show handler so it cannot re-render over us ──
+	// jQuery's .off('show') removes all non-namespaced show listeners.
+	// Frappe core fires the show event but does NOT listen to it, so this is safe.
+	$(wrapper).off('show');
+	$(wrapper).on('show.itc', function () {
+		refreshPage(wrapper);
+	});
+
+	// ── Clear HRMS filter bar (Dept / Branch dropdowns) ──
+	$(wrapper).find('.page-form').html('');
+
+	// ── Add company selector once ──
+	if (!wrapper._itc_co) {
+		wrapper._itc_co = page.add_field({
 			fieldname: "company", label: __("Company"), fieldtype: "Link",
 			options: "Company", default: frappe.defaults.get_default("company"), reqd: 1,
-			change: function () { doLoad(page); }
+			change: function () { fetchAndRender(wrapper); }
 		});
 	}
 
-	if (!document.getElementById("itc-page")) {
+	// ── Replace main content ──
+	$(page.body || page.main).html(
+		'<div id="itc-list"><div class="itc-empty">' + __("Loading...") + '</div></div>'
+	);
+
+	fetchAndRender(wrapper);
+}
+
+// Called every time the page becomes visible again (navigate away → back)
+function refreshPage(wrapper) {
+	var page = wrapper.page;
+	if (!page) return;
+
+	// Re-inject our container if something else cleared it
+	if (!document.getElementById('itc-list')) {
 		$(page.body || page.main).html(
-			'<div class="itc-page" id="itc-page">' +
-			'<div id="itc-list"><div class="itc-empty">' + __("Loading...") + '</div></div>' +
-			'</div>'
+			'<div id="itc-list"><div class="itc-empty">' + __("Loading...") + '</div></div>'
 		);
 	}
-
-	doLoad(page);
+	fetchAndRender(wrapper);
 }
 
 // ────────────────────────────
-// LOAD (API call)
+// FETCH
 // ────────────────────────────
-function doLoad(page) {
-	var co = page._co ? page._co.get_value() : frappe.defaults.get_default("company");
+function fetchAndRender(wrapper) {
+	var co = wrapper._itc_co
+		? wrapper._itc_co.get_value()
+		: frappe.defaults.get_default("company");
+
 	if (!co) {
 		$("#itc-list").html('<div class="itc-empty">' + __("Select a company") + '</div>');
 		return;
@@ -162,8 +180,7 @@ function doLoad(page) {
 		args: { company: co },
 		callback: function (r) {
 			if (!r.message) return;
-			var emps = r.message.employees || [];
-			doRender(emps);
+			doRender(r.message.employees || []);
 		},
 		error: function () {
 			$("#itc-list").html('<div class="itc-empty">' + __("Error loading data") + '</div>');
@@ -217,7 +234,6 @@ function doRender(emps) {
 function nodeH(node, depth, sibIdx) {
 	var d = node.d, kids = node.ch;
 	var c = paletteFor(depth, sibIdx);
-
 	var parts = [d.designation, d.department, d.branch].filter(function (v) { return !!v; });
 	var info = parts.join(' · ');
 
@@ -240,5 +256,10 @@ function nodeH(node, depth, sibIdx) {
 	h += '</div>';
 	return h;
 }
+
+// ── Kick off after current call stack clears ──
+// setTimeout(0) ensures all synchronous bundle code (including HRMS's
+// on_page_load registration) has finished before we install our override.
+setTimeout(start, 0);
 
 })();
