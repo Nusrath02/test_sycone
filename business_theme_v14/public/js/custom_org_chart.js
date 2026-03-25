@@ -111,7 +111,8 @@ function tryInject() {
 function loadAndRender() {
     var company = frappe.defaults.get_default("company");
     if (!company) {
-        document.getElementById("itc-list").innerHTML = '<div class="itc-empty">No default company set</div>';
+        var el = document.getElementById("itc-list");
+        if (el) el.innerHTML = '<div class="itc-empty">No default company set</div>';
         return;
     }
     frappe.call({
@@ -130,53 +131,17 @@ function loadAndRender() {
     });
 }
 
-function renderAll() {
-    var el = document.getElementById("itc-list");
-    if (!el) return;
-
+// Build unique dept/branch lists from _allEmps
+function getOptions() {
     var depts = {}, branches = {};
     _allEmps.forEach(function (e) {
         if (e.department) depts[e.department] = 1;
         if (e.branch) branches[e.branch] = 1;
     });
-    var deptList = Object.keys(depts).sort();
-    var branchList = Object.keys(branches).sort();
-
-    var fh = '<div class="itc-filter-bar">';
-    fh += '<div class="itc-filter-wrap"><label>Department</label>';
-    fh += '<select class="itc-select" id="itc-dept-filter">';
-    fh += '<option value="">All Departments</option>';
-    deptList.forEach(function (d) {
-        fh += '<option value="' + esc(d) + '"' + (_deptFilter === d ? ' selected' : '') + '>' + esc(d) + '</option>';
-    });
-    fh += '</select></div>';
-
-    fh += '<div class="itc-filter-wrap"><label>Branch</label>';
-    fh += '<select class="itc-select" id="itc-branch-filter">';
-    fh += '<option value="">All Branches</option>';
-    branchList.forEach(function (b) {
-        fh += '<option value="' + esc(b) + '"' + (_branchFilter === b ? ' selected' : '') + '>' + esc(b) + '</option>';
-    });
-    fh += '</select></div>';
-    fh += '</div>';
-
-    el.innerHTML = fh + '<div id="itc-tree-container"></div>';
-
-    document.getElementById("itc-dept-filter").addEventListener("change", function () {
-        _deptFilter = this.value;
-        renderTree();
-    });
-    document.getElementById("itc-branch-filter").addEventListener("change", function () {
-        _branchFilter = this.value;
-        renderTree();
-    });
-
-    el.addEventListener("click", function (ev) {
-        var card = ev.target.closest && ev.target.closest(".itc-card");
-        if (card && card.dataset.id) frappe.set_route("app", "employee", card.dataset.id);
-    });
-
-    renderTree();
+    return {
+        depts: Object.keys(depts).sort(),
+        branches: Object.keys(branches).sort()
+    };
 }
 
 function getFilteredEmps() {
@@ -186,14 +151,12 @@ function getFilteredEmps() {
     _allEmps.forEach(function (e) { empMap[e.id] = e; });
 
     var included = {};
-
     function includeWithAncestors(id) {
         if (included[id]) return;
         included[id] = true;
         var e = empMap[id];
         if (e && e.reports_to && empMap[e.reports_to]) includeWithAncestors(e.reports_to);
     }
-
     _allEmps.forEach(function (e) {
         var deptOk = !_deptFilter || e.department === _deptFilter;
         var branchOk = !_branchFilter || e.branch === _branchFilter;
@@ -203,15 +166,8 @@ function getFilteredEmps() {
     return _allEmps.filter(function (e) { return included[e.id]; });
 }
 
-function renderTree() {
-    var container = document.getElementById("itc-tree-container");
-    if (!container) return;
-
-    var emps = getFilteredEmps();
-    if (!emps || !emps.length) {
-        container.innerHTML = '<div class="itc-empty">No employees found</div>';
-        return;
-    }
+function buildTreeHtml(emps) {
+    if (!emps || !emps.length) return '<div class="itc-empty">No employees found</div>';
 
     var map = {}, i, e;
     for (i = 0; i < emps.length; i++) { e = emps[i]; map[e.id] = { d: e, ch: [] }; }
@@ -231,10 +187,10 @@ function renderTree() {
     var html = '<div class="org-wrap">';
     for (i = 0; i < roots.length; i++) html += nodeH(roots[i], 0, i);
     html += '</div>';
-    container.innerHTML = html;
+    return html;
 }
 
-// colorIdx is inherited from top-level ancestor; root children each get their own PAL slot
+// colorIdx is inherited per branch; root's children each get their own PAL slot
 function nodeH(node, depth, colorIdx) {
     var d = node.d, kids = node.ch;
     var color = palColor(colorIdx);
@@ -262,7 +218,6 @@ function nodeH(node, depth, colorIdx) {
     if (kids.length > 0) {
         h += '<div class="org-vline"></div><div class="org-children">';
         for (var j = 0; j < kids.length; j++) {
-            // Root's children each get their own color; deeper nodes inherit parent's color
             var childColor = depth === 0 ? j + 1 : colorIdx;
             h += '<div class="org-child-wrap">' + nodeH(kids[j], depth + 1, childColor) + '</div>';
         }
@@ -270,6 +225,60 @@ function nodeH(node, depth, colorIdx) {
     }
     h += '</div>';
     return h;
+}
+
+function renderAll() {
+    var el = document.getElementById("itc-list");
+    if (!el) return;
+
+    var opts = getOptions();
+    var html = "";
+
+    // Filter bar
+    html += '<div class="itc-filter-bar">';
+    html += '<div class="itc-filter-wrap"><label>Department</label>';
+    html += '<select class="itc-select" id="itc-dept-filter">';
+    html += '<option value="">All Departments</option>';
+    opts.depts.forEach(function (d) {
+        html += '<option value="' + esc(d) + '"' + (_deptFilter === d ? ' selected' : '') + '>' + esc(d) + '</option>';
+    });
+    html += '</select></div>';
+
+    html += '<div class="itc-filter-wrap"><label>Branch</label>';
+    html += '<select class="itc-select" id="itc-branch-filter">';
+    html += '<option value="">All Branches</option>';
+    opts.branches.forEach(function (b) {
+        html += '<option value="' + esc(b) + '"' + (_branchFilter === b ? ' selected' : '') + '>' + esc(b) + '</option>';
+    });
+    html += '</select></div>';
+    html += '</div>';
+
+    // Tree — built inline, no separate getElementById needed
+    html += buildTreeHtml(getFilteredEmps());
+
+    el.innerHTML = html;
+
+    // Use el.querySelector so we search within el, not the whole document
+    var deptSel = el.querySelector("#itc-dept-filter");
+    var branchSel = el.querySelector("#itc-branch-filter");
+
+    if (deptSel) {
+        deptSel.addEventListener("change", function () {
+            _deptFilter = this.value;
+            renderAll();
+        });
+    }
+    if (branchSel) {
+        branchSel.addEventListener("change", function () {
+            _branchFilter = this.value;
+            renderAll();
+        });
+    }
+
+    el.addEventListener("click", function (ev) {
+        var card = ev.target.closest && ev.target.closest(".itc-card");
+        if (card && card.dataset.id) frappe.set_route("app", "employee", card.dataset.id);
+    });
 }
 
 $(document).on("page-change", function () {
