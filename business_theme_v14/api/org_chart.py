@@ -1,25 +1,5 @@
 import frappe
-import os
 from frappe import _
-
-PALETTE = [
-    {"bg": "#ede9fc", "bd": "#7c3aed", "tx": "#5b21b6"},
-    {"bg": "#d1fae5", "bd": "#059669", "tx": "#065f46"},
-    {"bg": "#fee2e2", "bd": "#dc2626", "tx": "#991b1b"},
-    {"bg": "#dbeafe", "bd": "#2563eb", "tx": "#1e40af"},
-    {"bg": "#fef3c7", "bd": "#d97706", "tx": "#92400e"},
-    {"bg": "#fce7f3", "bd": "#db2777", "tx": "#9d174d"},
-]
-
-@frappe.whitelist(allow_guest=True)
-def serve_org_chart_js():
-	js_path = os.path.join(frappe.get_app_path("business_theme_v14"), "public", "js", "itc_org_chart.js")
-	with open(js_path, "r") as f:
-		content = f.read()
-	frappe.local.response["type"] = "binary"
-	frappe.local.response["filecontent"] = content.encode("utf-8")
-	frappe.local.response["content_type"] = "application/javascript; charset=utf-8"
-
 
 @frappe.whitelist()
 def get_org_chart_data(company, department="", branch=""):
@@ -39,7 +19,7 @@ def get_org_chart_data(company, department="", branch=""):
     emp_map = {e.name: e for e in employees}
 
     result = []
-    for idx, e in enumerate(employees):
+    for e in employees:
         result.append({
             "id": e.name,
             "name": e.employee_name,
@@ -48,7 +28,6 @@ def get_org_chart_data(company, department="", branch=""):
             "branch": e.branch or "",
             "reports_to": e.reports_to or "",
             "image": e.image or "",
-            "color": PALETTE[idx % len(PALETTE)],
         })
 
     all_depts = sorted(set(e["department"] for e in result if e["department"]))

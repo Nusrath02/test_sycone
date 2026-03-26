@@ -26,7 +26,7 @@ app_include_css = [
 
 app_include_js = [
     "/assets/business_theme_v14/js/sycone_footer.js",
-    "/api/method/business_theme_v14.api.org_chart.serve_org_chart_js",
+    f"/assets/business_theme_v14/js/custom_org_chart.js?v={app_version}",
 ]
 
 
