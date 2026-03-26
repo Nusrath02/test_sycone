@@ -10,12 +10,10 @@
     { bg: "#fce7f3", bd: "#db2777", tx: "#9d174d" },
   ];
 
-  function pickColor(excludes) {
-    var available = [];
-    for (var i = 0; i < PALETTE.length; i++) {
-      if (excludes.indexOf(i) === -1) available.push(i);
-    }
-    return available[Math.floor(Math.random() * available.length)];
+  function colorFor(id) {
+    var n = 0;
+    for (var i = 0; i < (id || "").length; i++) n += id.charCodeAt(i);
+    return PALETTE[n % PALETTE.length];
   }
 
   function esc(s) {
@@ -276,12 +274,7 @@
     });
 
     var html = '<div class="org-wrap">';
-    var prevRootColor = -1;
-    for (i = 0; i < roots.length; i++) {
-      var rootColor = pickColor(prevRootColor === -1 ? [] : [prevRootColor]);
-      html += nodeH(roots[i], rootColor);
-      prevRootColor = rootColor;
-    }
+    for (i = 0; i < roots.length; i++) html += nodeH(roots[i]);
     html += "</div>";
     el.innerHTML = html;
 
@@ -292,10 +285,10 @@
     });
   }
 
-  function nodeH(node, colorIdx) {
+  function nodeH(node) {
     var d = node.d,
       kids = node.ch,
-      c = PALETTE[colorIdx];
+      c = colorFor(d.id);
     var parts = [d.designation, d.department, d.branch].filter(function (v) {
       return !!v;
     });
@@ -318,14 +311,8 @@
     h += "</div>";
     if (kids.length > 0) {
       h += '<div class="org-vline"></div><div class="org-children">';
-      var prevChildColor = -1;
-      for (var j = 0; j < kids.length; j++) {
-        var excludes = [colorIdx];
-        if (prevChildColor !== -1) excludes.push(prevChildColor);
-        var childColor = pickColor(excludes);
-        h += '<div class="org-child-wrap">' + nodeH(kids[j], childColor) + "</div>";
-        prevChildColor = childColor;
-      }
+      for (var j = 0; j < kids.length; j++)
+        h += '<div class="org-child-wrap">' + nodeH(kids[j]) + "</div>";
       h += "</div>";
     }
     h += "</div>";
