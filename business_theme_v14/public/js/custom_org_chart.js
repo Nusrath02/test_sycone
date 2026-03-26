@@ -1,6 +1,7 @@
-// ITChamps Custom Org Chart
+// ITChamps Custom Org Chart v5
 
 (function () {
+  console.log("[ITC-ORG] v5 loaded - index-based colors active");
   var PALETTE = [
     { bg: "#ede9fc", bd: "#7c3aed", tx: "#5b21b6" },
     { bg: "#d1fae5", bd: "#059669", tx: "#065f46" },
@@ -10,10 +11,10 @@
     { bg: "#fce7f3", bd: "#db2777", tx: "#9d174d" },
   ];
 
+  var _colorMap = {};
+
   function colorFor(id) {
-    var n = 0;
-    for (var i = 0; i < (id || "").length; i++) n += id.charCodeAt(i);
-    return PALETTE[n % PALETTE.length];
+    return _colorMap[id] || PALETTE[0];
   }
 
   function esc(s) {
@@ -169,6 +170,10 @@
         if (r && r.message) {
           var msg = r.message;
           _allEmps = msg.employees || [];
+          _colorMap = {};
+          _allEmps.forEach(function (e, idx) {
+            _colorMap[e.id] = PALETTE[idx % PALETTE.length];
+          });
 
           var depts =
             msg.departments && msg.departments.length
