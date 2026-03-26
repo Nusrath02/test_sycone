@@ -10,9 +10,10 @@
     { bg: "#fce7f3", bd: "#db2777", tx: "#9d174d" },
   ];
 
-  function paletteFor(depth, sibIdx) {
-    if (depth === 0) return PALETTE[0];
-    return PALETTE[(depth + sibIdx) % PALETTE.length];
+  var _colorCounter = 0;
+
+  function nextColor() {
+    return PALETTE[_colorCounter++ % PALETTE.length];
   }
 
   function esc(s) {
@@ -272,8 +273,9 @@
       return a.d.name.localeCompare(b.d.name);
     });
 
+    _colorCounter = 0;
     var html = '<div class="org-wrap">';
-    for (i = 0; i < roots.length; i++) html += nodeH(roots[i], 0, i);
+    for (i = 0; i < roots.length; i++) html += nodeH(roots[i], 0);
     html += "</div>";
     el.innerHTML = html;
 
@@ -284,10 +286,10 @@
     });
   }
 
-  function nodeH(node, depth, sibIdx) {
+  function nodeH(node, depth) {
     var d = node.d,
       kids = node.ch,
-      c = paletteFor(depth, sibIdx);
+      c = nextColor();
     var parts = [d.designation, d.department, d.branch].filter(function (v) {
       return !!v;
     });
@@ -313,7 +315,7 @@
       for (var j = 0; j < kids.length; j++)
         h +=
           '<div class="org-child-wrap">' +
-          nodeH(kids[j], depth + 1, j) +
+          nodeH(kids[j], depth + 1) +
           "</div>";
       h += "</div>";
     }
