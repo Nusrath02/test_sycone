@@ -1,4 +1,5 @@
 import frappe
+import os
 from frappe import _
 
 PALETTE = [
@@ -9,6 +10,16 @@ PALETTE = [
     {"bg": "#fef3c7", "bd": "#d97706", "tx": "#92400e"},
     {"bg": "#fce7f3", "bd": "#db2777", "tx": "#9d174d"},
 ]
+
+@frappe.whitelist(allow_guest=True)
+def serve_org_chart_js():
+	js_path = os.path.join(frappe.get_app_path("business_theme_v14"), "public", "js", "itc_org_chart.js")
+	with open(js_path, "r") as f:
+		content = f.read()
+	frappe.local.response["type"] = "binary"
+	frappe.local.response["filecontent"] = content.encode("utf-8")
+	frappe.local.response["content_type"] = "application/javascript; charset=utf-8"
+
 
 @frappe.whitelist()
 def get_org_chart_data(company, department="", branch=""):
