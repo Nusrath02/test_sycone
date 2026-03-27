@@ -11,10 +11,9 @@ var PALETTE = [
     { bg: '#fce7f3', bd: '#db2777', tx: '#9d174d' },
 ];
 
-function paletteFor(depth, sibIdx) {
-    if (depth === 0) return PALETTE[0];
-    if (depth === 1) return PALETTE[1 + (sibIdx % (PALETTE.length - 1))];
-    return PALETTE[3];
+var _nodeCounter = 0;
+function paletteFor() {
+    return PALETTE[_nodeCounter++ % PALETTE.length];
 }
 
 function esc(s) { return frappe.utils.escape_html(s || ""); }
@@ -191,6 +190,7 @@ function renderTree() {
     var el = document.getElementById("itc-list");
     if (!el) return;
 
+    _nodeCounter = 0;
     var emps = getFilteredEmps();
     if (!emps || !emps.length) { el.innerHTML = '<div class="itc-empty">No employees found</div>'; return; }
 
@@ -210,7 +210,7 @@ function renderTree() {
     roots.sort(function (a, b) { return a.d.name.localeCompare(b.d.name); });
 
     var html = '<div class="org-wrap">';
-    for (i = 0; i < roots.length; i++) html += nodeH(roots[i], 0, i);
+    for (i = 0; i < roots.length; i++) html += nodeH(roots[i], 0);
     html += '</div>';
     el.innerHTML = html;
 
@@ -220,8 +220,8 @@ function renderTree() {
     });
 }
 
-function nodeH(node, depth, sibIdx) {
-    var d = node.d, kids = node.ch, c = paletteFor(depth, sibIdx);
+function nodeH(node, depth) {
+    var d = node.d, kids = node.ch, c = paletteFor();
     var parts = [d.designation, d.department, d.branch].filter(function (v) { return !!v; });
     var h = '<div class="org-node">';
     h += '<div class="itc-card" data-id="' + esc(d.id) + '"'
@@ -232,7 +232,7 @@ function nodeH(node, depth, sibIdx) {
     if (kids.length > 0) {
         h += '<div class="org-vline"></div><div class="org-children">';
         for (var j = 0; j < kids.length; j++)
-            h += '<div class="org-child-wrap">' + nodeH(kids[j], depth + 1, j) + '</div>';
+            h += '<div class="org-child-wrap">' + nodeH(kids[j], depth + 1) + '</div>';
         h += '</div>';
     }
     h += '</div>';
