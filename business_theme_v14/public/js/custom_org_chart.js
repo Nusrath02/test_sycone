@@ -1,6 +1,7 @@
-// ITChamps Custom Org Chart
+// ITChamps Custom Org Chart v4.0
 
 (function () {
+console.log("[ITC OrgChart] v4.0 loaded — hash-based 12-color palette");
 
 var PALETTE = [
     { bg: '#ede9fc', bd: '#7c3aed', tx: '#5b21b6' },
