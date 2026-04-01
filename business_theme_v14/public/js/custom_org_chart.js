@@ -1,7 +1,6 @@
-// ITChamps Custom Org Chart v4.0
+// ITChamps Custom Org Chart
 
 (function () {
-console.log("[ITC OrgChart] v4.0 loaded — hash-based 12-color palette");
 
 var PALETTE = [
     { bg: '#ede9fc', bd: '#7c3aed', tx: '#5b21b6' },
@@ -10,18 +9,12 @@ var PALETTE = [
     { bg: '#dbeafe', bd: '#2563eb', tx: '#1e40af' },
     { bg: '#fef3c7', bd: '#d97706', tx: '#92400e' },
     { bg: '#fce7f3', bd: '#db2777', tx: '#9d174d' },
-    { bg: '#ccfbf1', bd: '#0d9488', tx: '#115e59' },
-    { bg: '#ffedd5', bd: '#ea580c', tx: '#9a3412' },
-    { bg: '#e0f2fe', bd: '#0284c7', tx: '#075985' },
-    { bg: '#f0fdf4', bd: '#16a34a', tx: '#14532d' },
-    { bg: '#fdf4ff', bd: '#a21caf', tx: '#701a75' },
-    { bg: '#fff1f2', bd: '#e11d48', tx: '#881337' },
 ];
 
-function paletteFor(id) {
-    var n = 0;
-    for (var i = 0; i < (id || '').length; i++) n = (n * 31 + (id || '').charCodeAt(i)) >>> 0;
-    return PALETTE[n % PALETTE.length];
+function paletteFor(depth, sibIdx) {
+    if (depth === 0) return PALETTE[0];
+    if (depth === 1) return PALETTE[1 + (sibIdx % (PALETTE.length - 1))];
+    return PALETTE[3];
 }
 
 function esc(s) { return frappe.utils.escape_html(s || ""); }
@@ -198,7 +191,6 @@ function renderTree() {
     var el = document.getElementById("itc-list");
     if (!el) return;
 
-    _nodeCounter = 0;
     var emps = getFilteredEmps();
     if (!emps || !emps.length) { el.innerHTML = '<div class="itc-empty">No employees found</div>'; return; }
 
@@ -218,7 +210,7 @@ function renderTree() {
     roots.sort(function (a, b) { return a.d.name.localeCompare(b.d.name); });
 
     var html = '<div class="org-wrap">';
-    for (i = 0; i < roots.length; i++) html += nodeH(roots[i], 0);
+    for (i = 0; i < roots.length; i++) html += nodeH(roots[i], 0, i);
     html += '</div>';
     el.innerHTML = html;
 
@@ -228,8 +220,8 @@ function renderTree() {
     });
 }
 
-function nodeH(node, depth) {
-    var d = node.d, kids = node.ch, c = paletteFor(d.id);
+function nodeH(node, depth, sibIdx) {
+    var d = node.d, kids = node.ch, c = paletteFor(depth, sibIdx);
     var parts = [d.designation, d.department, d.branch].filter(function (v) { return !!v; });
     var h = '<div class="org-node">';
     h += '<div class="itc-card" data-id="' + esc(d.id) + '"'
@@ -240,7 +232,7 @@ function nodeH(node, depth) {
     if (kids.length > 0) {
         h += '<div class="org-vline"></div><div class="org-children">';
         for (var j = 0; j < kids.length; j++)
-            h += '<div class="org-child-wrap">' + nodeH(kids[j], depth + 1) + '</div>';
+            h += '<div class="org-child-wrap">' + nodeH(kids[j], depth + 1, j) + '</div>';
         h += '</div>';
     }
     h += '</div>';
