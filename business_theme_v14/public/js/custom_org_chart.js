@@ -9,6 +9,12 @@ var PALETTE = [
     { bg: '#dbeafe', bd: '#2563eb', tx: '#1e40af' },
     { bg: '#fef3c7', bd: '#d97706', tx: '#92400e' },
     { bg: '#fce7f3', bd: '#db2777', tx: '#9d174d' },
+    { bg: '#ccfbf1', bd: '#0d9488', tx: '#115e59' },
+    { bg: '#ffedd5', bd: '#ea580c', tx: '#9a3412' },
+    { bg: '#e0f2fe', bd: '#0284c7', tx: '#075985' },
+    { bg: '#f0fdf4', bd: '#16a34a', tx: '#14532d' },
+    { bg: '#fdf4ff', bd: '#a21caf', tx: '#701a75' },
+    { bg: '#fff1f2', bd: '#e11d48', tx: '#881337' },
 ];
 
 function paletteFor(depth, sibIdx) {
