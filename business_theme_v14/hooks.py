@@ -21,7 +21,7 @@ import time
 app_version = str(int(time.time()))  # current timestamp, changes every deploy
  
 app_include_css = [
-    f"/assets/business_theme_v14/css/custom_theme.css?v={app_version}"
+    "/assets/business_theme_v14/css/custom_theme.css"
 ]
 
 app_include_js = [
