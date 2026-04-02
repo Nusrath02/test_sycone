@@ -1,0 +1,15 @@
+[project]
+name = "business_theme_v14"
+version = "0.0.1"
+description = "Business Theme for ERPNext / Frappe"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Midocean Technologies Pvt Ltd", email = "sagar@midocean.tech" }
+]
+requires-python = ">=3.10"
+dependencies = []
+
+[build-system]
+requires = ["flit_core >=3.2.0,<4"]
+build-backend = "flit_core.buildapi"
