@@ -17,10 +17,10 @@ var PALETTE = [
     { bg: '#fff1f2', bd: '#e11d48', tx: '#881337' },
 ];
 
-function paletteFor(depth, sibIdx) {
-    if (depth === 0) return PALETTE[0];
-    if (depth === 1) return PALETTE[1 + (sibIdx % (PALETTE.length - 1))];
-    return PALETTE[3];
+var _colorIdx = 0;
+
+function paletteFor() {
+    return PALETTE[_colorIdx++ % PALETTE.length];
 }
 
 function esc(s) { return frappe.utils.escape_html(s || ""); }
@@ -215,6 +215,7 @@ function renderTree() {
     for (i = 0; i < roots.length; i++) srt(roots[i]);
     roots.sort(function (a, b) { return a.d.name.localeCompare(b.d.name); });
 
+    _colorIdx = 0;
     var html = '<div class="org-wrap">';
     for (i = 0; i < roots.length; i++) html += nodeH(roots[i], 0, i);
     html += '</div>';
@@ -226,8 +227,8 @@ function renderTree() {
     });
 }
 
-function nodeH(node, depth, sibIdx) {
-    var d = node.d, kids = node.ch, c = paletteFor(depth, sibIdx);
+function nodeH(node, depth) {
+    var d = node.d, kids = node.ch, c = paletteFor();
     var parts = [d.designation, d.department, d.branch].filter(function (v) { return !!v; });
     var h = '<div class="org-node">';
     h += '<div class="itc-card" data-id="' + esc(d.id) + '"'
